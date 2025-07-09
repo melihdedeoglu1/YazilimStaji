@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Anasayfa</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .navbar nav a {
+                color: white;
+                margin-left: 20px;
+                text-decoration: none;
+            }
+
+        .search-bar {
+            padding: 20px;
+            text-align: center;
+        }
+
+            .search-bar input {
+                padding: 10px;
+                width: 50%;
+                max-width: 400px;
+                font-size: 16px;
+            }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 6px;
+        }
+
+            .product-card img {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+            }
+
+            .product-card input[type="number"] {
+                margin-top: 5px;
+                width: 60px;
+            }
+
+        .actions {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div>Kullanıcı Adı</div>
+        <nav>
+            <a href="#">Siparişlerim</a>
+            <a href="#">Çıkış</a>
+        </nav>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Ürün ara...">
+    </div>
+
+    <div class="product-grid" id="productList">
+        <!-- Ürünler buraya gelecek -->
+    </div>
+
+    <div class="actions">
+        <button onclick="createOrder()">Sipariş Oluştur</button>
+    </div>
+
+    <script>
+        let selectedProducts = [];
+        let products = [];
+
+        window.onload = async function () {
+            try {
+                const response = await fetch("https://localhost:7189/api/Product");
+                products = await response.json();
+                renderProducts(products);
+            } catch (error) {
+                console.error("Ürünleri alırken hata oluştu:", error);
+            }
+
+            document.getElementById("searchInput").addEventListener("input", function (e) {
+                const keyword = e.target.value.toLowerCase();
+                const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+                renderProducts(filtered);
+            });
+        };
+
+        function renderProducts(productArray) {
+            const productList = document.getElementById("productList");
+            productList.innerHTML = "";
+
+            productArray.forEach(product => {
+                const card = document.createElement("div");
+                card.classList.add("product-card");
+
+                card.innerHTML = `
+              <h3>${product.name}</h3>
+              <img src="${product.imageUrl}" alt="${product.name}" />
+              <p>Fiyat: ${product.price} ₺</p>
+              <input type="number" min="1" max="${product.stock}" value="1" id="quantity-${product.id}" />
+              <br />
+              <button onclick="selectProduct(${product.id}, '${product.name}', ${product.price})">
+                Ürünü Seç
+              </button>
+            `;
+
+                productList.appendChild(card);
+            });
+        }
+
+        function selectProduct(id, name, price) {
+            const input = document.getElementById(`quantity-${id}`);
+            const quantity = parseInt(input.value);
+
+            const existing = selectedProducts.find(p => p.id === id);
+            if (existing) {
+                existing.quantity = quantity;
+            } else {
+                selectedProducts.push({ id, name, price, quantity });
+            }
+
+            alert(`${name} sepete eklendi (${quantity} adet)`);
+        }
+
+        function createOrder() {
+            if (selectedProducts.length === 0) {
+                alert("Lütfen önce ürün seçin.");
+                return;
+            }
+
+            console.log("Sipariş Verilen Ürünler:", selectedProducts);
+            alert("Sipariş alındı (şimdilik test modunda)");
+        }
+    </script>
+
+</body>
+</html>
