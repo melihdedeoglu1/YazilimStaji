@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Staj_2gun.Tests", "Staj_2gun.Tests\Staj_2gun.Tests.csproj", "{A31B7A5D-4E8A-40AD-9A7E-3C4A5E2461A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Staj_2gun", "..\Staj_2gun\Staj_2gun\Staj_2gun.csproj", "{8946BF86-FA52-4407-9058-E92B2431E37B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A31B7A5D-4E8A-40AD-9A7E-3C4A5E2461A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A31B7A5D-4E8A-40AD-9A7E-3C4A5E2461A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A31B7A5D-4E8A-40AD-9A7E-3C4A5E2461A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A31B7A5D-4E8A-40AD-9A7E-3C4A5E2461A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8946BF86-FA52-4407-9058-E92B2431E37B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8946BF86-FA52-4407-9058-E92B2431E37B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8946BF86-FA52-4407-9058-E92B2431E37B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8946BF86-FA52-4407-9058-E92B2431E37B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ADE37701-E425-4B13-AC2D-928EFD2C3B7D}
+	EndGlobalSection
+EndGlobal

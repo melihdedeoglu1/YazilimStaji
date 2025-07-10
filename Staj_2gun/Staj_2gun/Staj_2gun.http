@@ -1,0 +1,50 @@
+@Staj_2gun_HostAddress = https://localhost:7272
+
+### Get all customers
+GET {{Staj_2gun_HostAddress}}/api/customer
+Accept: application/json
+
+###
+
+### Add a new customer
+POST {{Staj_2gun_HostAddress}}/api/customer
+Content-Type: application/json
+
+{
+  "name": "Ali Veli"
+}
+
+###
+
+### Get all products
+GET {{Staj_2gun_HostAddress}}/api/order
+Accept: application/json
+
+###
+###
+POST {{Staj_2gun_HostAddress}}/api/order
+Content-Type: application/json
+
+{
+  "customerId": 2,
+  "orderItems": [
+    {
+      "productId": 2,
+      "quantity": 3
+    },
+    {
+      "productId": 1,
+      "quantity": 1
+    }
+  ]
+}
+###
+
+### Add a product
+POST {{Staj_2gun_HostAddress}}/api/product
+Content-Type: application/json
+
+{
+  "name": "Yeni Ürün",
+  "stock": 100
+}
