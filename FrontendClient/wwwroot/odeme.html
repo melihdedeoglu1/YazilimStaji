@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ödeme Sayfası</title>
+</head>
+<body>
+    <h1>Ödeme Sayfası</h1>
+    <p id="orderInfo"></p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get("orderId");
+        document.getElementById("orderInfo").textContent = "Sipariş ID: " + orderId;
+    </script>
+</body>
+</html>

@@ -13,6 +13,7 @@ namespace CustomerService.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerServices _customerService;
+
         public CustomerController(ICustomerServices customerService)
         {
             _customerService = customerService;
@@ -29,12 +30,17 @@ namespace CustomerService.Controllers
             return Ok(customer);
         }
 
+
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAllCustomers()
         {
             var customers = await _customerService.GetAllCustomersAsync();
             return Ok(customers);
         }
+
+
+
 
         [HttpPost("from-auth")]    
         public async Task<IActionResult> AddCustomer(CreateCustomerDto createCustomerDto)

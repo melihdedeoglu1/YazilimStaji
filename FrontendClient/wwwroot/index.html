@@ -1,52 +1,102 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+
+            .login-container h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .login-container input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            .login-container button {
+                width: 100%;
+                padding: 10px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+                .login-container button:hover {
+                    background-color: #218838;
+                }
+    </style>
 </head>
 <body>
-    <h2>Giriş Yap</h2>
-    <input type="text" id="username" placeholder="Kullanıcı Adı" /><br /><br />
-    <input type="password" id="password" placeholder="Şifre" /><br /><br />
-    <button onclick="login()">Giriş Yap</button>
+    <div class="login-container">
+        <h2>Giriş Yap</h2>
+        <input type="text" id="username" placeholder="Kullanıcı Adı">
+        <input type="password" id="password" placeholder="Şifre">
+        <button onclick="login()">Giriş Yap</button>
+    </div>
 
     <script>
-    async function login() {
-      const userName = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+        async function login() {
+            const userName = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-      const response = await fetch("https://localhost:7299/api/Auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ userName, password })
-      });
+            try {
+                const response = await fetch("https://localhost:7299/api/Auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ userName, password })
+                });
 
-      if (!response.ok) {
-        alert("Giriş başarısız");
-        return;
-      }
+                if (!response.ok) {
+                    alert("Giriş başarısız!");
+                    return;
+                }
 
-      const data = await response.json();
-      console.log("Giriş başarılı!", data);
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
 
-      localStorage.setItem("token", data.token);
-      alert("Token alındı, konsola bak.");
+                const customerResponse = await fetch("https://localhost:7068/api/customer/me", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + data.token
+                    }
+                });
 
-      // Örnek: customer/me endpoint'ine token ile istek
-      const customerRes = await fetch("https://localhost:7068/api/customer/me", {
-        method: "GET",
-        headers: {
-          "Authorization": "Bearer " + data.token
+                const customerData = await customerResponse.json();
+                localStorage.setItem("customerId", customerData.userId);
+
+                window.location.href = "anasayfa.html";
+            } catch (error) {
+                console.error("Giriş sırasında hata:", error);
+                alert("Hata oluştu. Lütfen tekrar deneyin.");
+            }
         }
-      });
-
-      const customerData = await customerRes.json();
-        console.log("Customer/me cevabı:", customerData);
-
-        window.location.href = "anasayfa.html"; // örnek
-    }
     </script>
 </body>
 </html>
