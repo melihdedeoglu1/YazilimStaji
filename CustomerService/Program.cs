@@ -8,6 +8,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+//builder.WebHost.UseUrls("http://*:80");
+
+
+
 // Add services to the container.
 
 builder.Services.AddDbContext<CustomerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -20,7 +26,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("https://localhost:7173") // frontend portu!
+            .WithOrigins("https://localhost:7173", "https://localhost:7281", "https://localhost:7068") // Eklenen portlara dikkat!
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
@@ -88,7 +94,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

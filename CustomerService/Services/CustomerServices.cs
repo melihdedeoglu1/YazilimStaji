@@ -56,5 +56,16 @@ namespace CustomerService.Services
             return customer;
         }
 
+
+        public async Task<Customer> UpdateAsync(Customer customer)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentNullException(nameof(customer), "Customer cannot be null");
+            }
+            _context.Customers.Update(customer);
+            await _context.SaveChangesAsync();
+            return customer;
+        }
     }
 }

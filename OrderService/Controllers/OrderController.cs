@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OrderService.DTOs;
 using OrderService.Models;
 using OrderService.Services;
@@ -39,5 +40,25 @@ namespace OrderService.Controllers
             var result = await _orderServices.CreateOrderAsync(createOrderDto);
             return Ok(new { orderId = result.Id });
         }
+
+        [HttpGet("{id}/total")]
+        public async Task<IActionResult> GetOrderTotalById(Guid id)
+        {
+            var order = await _orderServices.GetOrderByIdAsync(id);
+
+            if (order == null)
+                return NotFound();
+
+            var totalAmount = order.Items.Sum(item => item.Price * item.Quantity);
+
+            return Ok(new
+            {
+                order.Id,
+                order.CustomerId,               
+                totalAmount
+            });
+        }
+
+
     }
 }

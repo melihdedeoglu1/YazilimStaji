@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kargo Durumu</title>
+</head>
+<body>
+    <h1>Kargo Takip</h1>
+    <p id="shippingInfo">Yükleniyor...</p>
+    <div id="cancelSection" style="margin-top:20px;"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get("orderId");
+        const customerId = params.get("customerId");
+        const token = localStorage.getItem("token");
+
+        // Kargo durumunu getir
+        fetch(`https://localhost:7061/api/shipping/${orderId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Kargo bilgisi alınamadı");
+            return res.json();
+        })
+            .then(data => {
+                console.log("Shipping response:", data);
+            const statusMap = {
+                "Hazirlaniyor": "Hazırlanıyor",
+                "KargoyaVerildi": "Kargoya Verildi",
+                "TeslimEdildi": "Teslim Edildi",
+                "IptalEdildi": "İptal Edildi"
+            };
+
+            const status = statusMap[data.status];
+            document.getElementById("shippingInfo").innerText =
+                `Sipariş ID: ${data.orderId}\nDurum: ${status}`;
+
+            // Eğer teslim edilmediyse iptal butonu ekle
+            if (data.status !== 2 && data.status !== 3) {
+                document.getElementById("cancelSection").innerHTML = `
+                    <button onclick="cancelOrder()">❌ Siparişim Gelmedi</button>
+                `;
+            }
+        })
+        .catch(err => {
+            document.getElementById("shippingInfo").innerText = "❌ " + err.message;
+        });
+
+        function cancelOrder() {
+            if (!confirm("Siparişi iptal etmek istediğinize emin misiniz?")) return;
+
+            fetch(`https://localhost:7061/api/shipping/cancel/${orderId}`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("İptal başarısız");
+                return res.json();
+            })
+            .then(() => {
+                alert("Sipariş başarıyla iptal edildi. Ücret iadesi yapılacaktır.");
+                window.location.reload();
+            })
+            .catch(err => {
+                alert("❌ " + err.message);
+            });
+        }
+    </script>
+</body>
+</html>

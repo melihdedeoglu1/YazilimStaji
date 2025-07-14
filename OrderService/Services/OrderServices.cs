@@ -2,6 +2,9 @@
 using OrderService.Models;
 using System;
 using OrderService.Data;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 namespace OrderService.Services
 {
     public class OrderServices : IOrderServices
@@ -37,6 +40,13 @@ namespace OrderService.Services
             await _context.SaveChangesAsync();
 
             return order;
+        }
+
+        public async Task<Order> GetOrderByIdAsync(Guid orderId)
+        {
+            return await _context.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
         }
     }
 }

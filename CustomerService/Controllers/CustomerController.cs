@@ -70,5 +70,28 @@ namespace CustomerService.Controllers
                 email
             });
         }
+
+        [HttpPatch("{id}/decrease-balance")]
+        public async Task<IActionResult> DecreaseBalance(Guid id, [FromQuery] int amount)
+        {
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null)
+                return NotFound("Müşteri bulunamadı.");
+
+            if (customer.Age < amount)
+                return BadRequest("Yetersiz bakiye.");
+
+            customer.Age -= amount; // 👈 Buradaki Age senin bakiyen oluyor
+            await _customerService.UpdateAsync(customer);
+
+            return Ok(customer);
+        }
+
+
+
+
+
+
+
     }
 }

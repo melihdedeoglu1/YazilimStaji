@@ -10,5 +10,7 @@ namespace CustomerService.Services
 
         Task<Customer> AddAsync(CreateCustomerDto createCustomerDto);
 
+        Task<Customer> UpdateAsync(Customer customer);
+
     }
 }

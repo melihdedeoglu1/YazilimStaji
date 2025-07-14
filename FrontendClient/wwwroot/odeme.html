@@ -7,11 +7,96 @@
 <body>
     <h1>Ödeme Sayfası</h1>
     <p id="orderInfo"></p>
+    <p id="amountInfo">Yükleniyor...</p>
+
+    <label for="address">Adres ID Giriniz:</label>
+    <input type="text" id="address" placeholder="örn: adres-1">
+    <button id="payButton" style="display:none;">Ödemeyi Yap ve Gönder</button>
+
+    <div id="paymentStatus"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const orderId = params.get("orderId");
-        document.getElementById("orderInfo").textContent = "Sipariş ID: " + orderId;
+        const customerId = params.get("customerId");
+        const token = localStorage.getItem("token");
+        let currentAmount = 0;
+
+        document.getElementById("orderInfo").textContent =
+            "Sipariş ID: " + orderId + " | Müşteri ID: " + customerId;
+
+        // 1️⃣ Tutarı al
+        fetch(`https://localhost:7096/api/order/${orderId}/total`, {
+            headers: { "Authorization": "Bearer " + token }
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Toplam tutar alınamadı");
+                return response.json();
+            })
+            .then(data => {
+                currentAmount = data.totalAmount;
+                document.getElementById("amountInfo").innerText =
+                    "Toplam Tutar: " + currentAmount + " ₺";
+                document.getElementById("payButton").style.display = "inline-block";
+            })
+            .catch(err => {
+                document.getElementById("amountInfo").innerText = "❌ " + err.message;
+            });
+
+        // 2️⃣ Butona tıklanınca ödeme ve shipping
+        document.getElementById("payButton").addEventListener("click", () => {
+            const addressId = document.getElementById("address").value.trim();
+            if (!addressId) {
+                alert("Adres bilgisi gereklidir.");
+                return;
+            }
+
+            const paymentData = { orderId, customerId, amount: currentAmount };
+
+            // Önce ödeme
+            fetch("https://localhost:7281/api/payment/payments", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify(paymentData)
+            })
+                .then(response => {
+                    if (!response.ok) return response.text().then(text => {
+                        throw new Error("Ödeme başarısız: " + text);
+                    });
+                    return response.json();
+                })
+                .then(() => {
+                    // Sonra shipping
+                    const shippingData = { customerId, orderId, addressId };
+
+                    return fetch("https://localhost:7061/api/shipping", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        },
+                        body: JSON.stringify(shippingData)
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Kargo oluşturulamadı");
+                    return response.json();
+                })
+                .then(() => {
+                    document.getElementById("paymentStatus").innerHTML =
+                        "<p style='color:green'>✅ Ödeme ve kargo tamamlandı. Yönlendiriliyorsunuz...</p>";
+                    setTimeout(() => {
+                        window.location.href = `shipping.html?orderId=${orderId}&customerId=${customerId}`;
+                    }, 1500);
+                })
+                .catch(error => {
+                    document.getElementById("paymentStatus").innerHTML =
+                        "<p style='color:red'>❌ " + error.message + "</p>";
+                });
+        });
     </script>
 </body>
 </html>

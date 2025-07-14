@@ -8,6 +8,6 @@ namespace OrderService.Services
     public interface IOrderServices
     {
         Task<Order> CreateOrderAsync(CreateOrderDto createOrderDto);       
-
+        Task<Order> GetOrderByIdAsync(Guid orderId);
     }
 }

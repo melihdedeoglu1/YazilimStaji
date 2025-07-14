@@ -33,12 +33,6 @@ namespace ProductService.Controllers
 
 
 
-
-
-
-
-
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
@@ -60,6 +54,24 @@ namespace ProductService.Controllers
             return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.Id }, createdProduct);
 
         }
+
+
+
+        [HttpPatch("{id}/decrease-stock")]
+        public async Task<IActionResult> DecreaseStock(int id, [FromQuery] int quantity)
+        {
+            if (quantity <= 0)
+            {
+                return BadRequest("Quantity must be greater than zero.");
+            }
+            var updatedProduct = await _productService.DecreaseStockAsync(id, quantity);
+            if (updatedProduct == null)
+            {
+                return NotFound("Product not found or insufficient stock.");
+            }
+            return Ok(updatedProduct);
+        }
+
 
     }
 }
