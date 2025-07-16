@@ -1,6 +1,8 @@
 # YazilimStaji
 Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığım çalışmalar.
 
+# Saga Pattern
+
 <details>
   <summary><strong>1. Saga pattern mikroservis mimarisinde hangi sorunları çözmeye çalışır?</strong></summary>
   <br>
@@ -55,4 +57,17 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   ![Tablo](tablo.png)
   
  
+</details>
+
+
+# Xunit ve Moq
+
+<details>
+  <summary><strong>2. Xunit ve Moq Temel Kavramları.</strong></summary>
+  <br>
+  
+  **Xunit:** Unit Test, bir yazılımın en küçük test edilebilir bölümlerinin(sınıflar,metodlar vs.), tek tek ve bağımsız olarak doğru çalışabilirliğinin incelendiği bir yazılım geliştirme sürecidir. Xunit ise popüler Unit Test Frameworklerinden biridir. 
+
+  **Moq:** C# dilinde ve birim testlerinde yaygın olarak kullanılan bir mocking(taklit nesne oluşturma) kütüphanesidir. 
+  
 </details>
