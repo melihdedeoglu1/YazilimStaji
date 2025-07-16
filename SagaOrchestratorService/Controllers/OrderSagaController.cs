@@ -29,6 +29,7 @@ namespace SagaOrchestratorService.Controllers
             {
                 
                 var orderResp = await AuthorizedPost($"{orderService}/api/order/create", dto, token);
+
                 if (!orderResp.IsSuccessStatusCode)
                     return BadRequest("Sipariş oluşturulamadı.");
 
@@ -68,6 +69,7 @@ namespace SagaOrchestratorService.Controllers
                 
                 var paymentDto = new { orderId = dto.OrderId, customerId = dto.CustomerId, amount = dto.Amount };
                 var payResp = await AuthorizedPost($"{paymentService}/api/payment/payments", paymentDto, token);
+
                 if (!payResp.IsSuccessStatusCode)
                 {
                     await RollbackStock(dto.OrderId, token);
@@ -75,9 +77,10 @@ namespace SagaOrchestratorService.Controllers
                     return BadRequest("Ödeme başarısız. Sipariş iptal edildi.");
                 }
 
-                // 2. Kargo oluştur
+                
                 var shippingDto = new { customerId = dto.CustomerId, orderId = dto.OrderId, addressId = dto.AddressId };
                 var shipResp = await AuthorizedPost($"{shippingService}/api/shipping", shippingDto, token);
+
                 if (!shipResp.IsSuccessStatusCode)
                 {
                     await _httpClient.PostAsJsonAsync($"{paymentService}/api/payment/refund", dto.OrderId);
@@ -94,7 +97,45 @@ namespace SagaOrchestratorService.Controllers
             }
         }
 
-        
+
+
+
+        [HttpPost("rollback-stock")]
+        public async Task<IActionResult> ManualRollback([FromBody] ManualRollbackDto manualRollbackDto)
+        {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "").Trim();
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized("Bearer token gerekli");
+
+            var orderService = "https://localhost:7096";
+            var productService = "https://localhost:7156";
+
+
+            var orderDetailsResp = await AuthorizedGet($"{orderService}/api/order/details/{manualRollbackDto.OrderId}", token);
+            if (!orderDetailsResp.IsSuccessStatusCode)
+                return BadRequest("Sipariş detayları alınamadı");
+
+            var orderDetails = await orderDetailsResp.Content.ReadFromJsonAsync<OrderDetailsDto>();
+            if (orderDetails == null || orderDetails.Items == null)
+                return BadRequest("Sipariş kalemleri eksik");
+
+
+            foreach (var item in orderDetails.Items)
+            {
+                var rollbackResp = await AuthorizedPatch(
+                    $"{productService}/api/product/{item.ProductId}/increase-stock?quantity={item.Quantity}",
+                    token);
+
+                if (!rollbackResp.IsSuccessStatusCode)
+                    return BadRequest("Stok iade işlemi sırasında hata oluştu.");
+            }
+
+            return Ok("Stoklar iade edildi.");
+        }
+
+
+
+
         private string? GetToken()
         {
             return Request.Headers["Authorization"].ToString().Replace("Bearer ", "").Trim();
@@ -147,6 +188,22 @@ namespace SagaOrchestratorService.Controllers
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return await _httpClient.SendAsync(request);
         }
+
+        [HttpPost("cancel-order/{orderId}")]
+        public async Task<IActionResult> CancelOrderByUser(Guid orderId)
+        {
+            var token = GetToken();
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized("Bearer token gerekli");
+
+            await RollbackStock(orderId, token);
+            await CancelOrder(orderId, token);
+            return Ok("Sipariş kullanıcı tarafından iptal edildi.");
+        }
+
+
+
+
     }
 
    
