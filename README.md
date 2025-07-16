@@ -34,3 +34,14 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   **Orchestration Saga pattern dezavantajları:** Çok adım gerektiğinde karmaşıklık meydana gelebilir. Her adımın sadece komutu işlemesi hariç telafi edici işlemleri de olduğu için tüm senaryoları düşünmek zordur ve çaba gerektirir. 
  
 </details>
+
+---
+
+<details>
+  <summary><strong>4.1. Bu süreci yönetmek için bir Saga pattern tasarlayın ve basit bir durum makinesi (state machine) diyagramı çizin. Sipariş Verildi aşamasından Sipariş Tamamlandı aşamasına kadar olan her bir durumu çizin ve her bir başarısızlık durumunda geri alma adımlarını gösterin.</strong></summary>
+  <br>
+
+  ![StateMachine](statemachine.png)
+  
+ 
+</details>
