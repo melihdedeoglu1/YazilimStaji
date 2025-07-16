@@ -71,3 +71,22 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   **Moq:** C# dilinde ve birim testlerinde yaygın olarak kullanılan bir mocking(taklit nesne oluşturma) kütüphanesidir. 
   
 </details>
+
+---
+
+<details>
+  <summary><strong>2.1. Bu kütüphanelerde sıkça kullanılan fonksiyonları ve kavramları açıklayın.</strong></summary>
+  <br>
+  
+  **Service Under Test (Sut):**  Unit test metodlarını yazarken test edilecek sınıf ya da servisin ismini belirtmede yada değişken ismi tanımlarken kullanılır.
+
+  **Mocking:** Sut içerisinde bulunan business’a ait testleri yazarken içerisinde kullanılan nesnelere ait fake sınıflardır. Mock öncelikle birim testlerinde kullanılır. Test edilen bir nesnenin diğer (karmaşık) nesnelere bağımlılıkları olabilir. Orjinal nesnenin davranışını yalıtmak için, onun yerine , gerçek nesnelerin davranışını taklit eden sahte nesnelerle değiştirmek gerekir. Kısacası, mocking etmek gerçek nesnelerin davranışını simüle eden nesneler yaratmaktır.
+
+  **Expected:** Unit test yazdığımız metodun veya fonksiyonun return etmesi beklenen çıktısına denir.
+
+  **Actual:** Unit test’ini yazdığımız metot ya da sınıfın gerçek, o an return ettiği result’ı tanımlarken kullanılır.
+
+  **Assertion:** Actual ve expected dönüş değerlerinin karşılaştırılacağı, içerisinde tanımlamalar yapabildiğimiz yapının/metodun/sınıfın ismidir.
+
+  **[Fact]:**
+</details>
