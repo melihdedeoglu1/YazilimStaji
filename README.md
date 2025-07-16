@@ -45,3 +45,14 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   
  
 </details>
+
+---
+
+<details>
+  <summary><strong>4.2. Her bir durumda, ilgili hizmetin başarılı ya da başarısız olması durumunda nasıl bir geçiş yapılacağını açıklayın.</strong></summary>
+  <br>
+
+  ![Tablo](tablo.png)
+  
+ 
+</details>
