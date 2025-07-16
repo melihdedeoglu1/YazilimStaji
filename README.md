@@ -88,5 +88,11 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   **Assertion:** Actual ve expected dönüş değerlerinin karşılaştırılacağı, içerisinde tanımlamalar yapabildiğimiz yapının/metodun/sınıfın ismidir.
 
-  **[Fact]:**
+  **[Fact]:** Özniteliktir, yazmış olduğumuz metodun test çalıştırıcısı tarafından yürütülmesi gerektiğini belirtir.
+
+  **[Teori]:** Özelliktir, test metoduna parametreler göndereceğimizi belirtir.
+
+  **[InlineData]:** özniteliktir, test yöntemine gönderdiğimiz parametreleri ifade eder. Parametre sayısı kadar InlineData bulunur. [Teori] özelliğini kullanılıyorsa, [InlineData] öğesi de kullanılmak zorundadır.
+
+  
 </details>
