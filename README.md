@@ -63,6 +63,14 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 # Xunit ve Moq
 
 <details>
+  <summary><strong>1.	.NET platformunda unit test yapma sürecini açıklayın ve örnek olarak Xunit ve Moq kütüphanelerini kullanarak bir unit test yazın</strong></summary>
+  <br> 
+  
+</details>
+
+---
+
+<details>
   <summary><strong>2. Xunit ve Moq Temel Kavramları.</strong></summary>
   <br>
   
@@ -82,6 +90,10 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   **Mocking:** Sut içerisinde bulunan business’a ait testleri yazarken içerisinde kullanılan nesnelere ait fake sınıflardır. Mock öncelikle birim testlerinde kullanılır. Test edilen bir nesnenin diğer (karmaşık) nesnelere bağımlılıkları olabilir. Orjinal nesnenin davranışını yalıtmak için, onun yerine , gerçek nesnelerin davranışını taklit eden sahte nesnelerle değiştirmek gerekir. Kısacası, mocking etmek gerçek nesnelerin davranışını simüle eden nesneler yaratmaktır.
 
+  **Arrange:** Testin başında gerekli ortam hazırlanır. Mock nesneleri, sut vs.
+
+  **Act:** Test etmek istediğin metod çağrılır. Amaç davranışı tetiklemektir.
+  
   **Expected:** Unit test yazdığımız metodun veya fonksiyonun return etmesi beklenen çıktısına denir.
 
   **Actual:** Unit test’ini yazdığımız metot ya da sınıfın gerçek, o an return ettiği result’ı tanımlarken kullanılır.
@@ -93,6 +105,39 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   **[Teori]:** Özelliktir, test metoduna parametreler göndereceğimizi belirtir.
 
   **[InlineData]:** özniteliktir, test yöntemine gönderdiğimiz parametreleri ifade eder. Parametre sayısı kadar InlineData bulunur. [Teori] özelliğini kullanılıyorsa, [InlineData] öğesi de kullanılmak zorundadır.
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2.2. Mocked object üretme: Testlerde bağımlılıkları izole etmek için nesneleri nasıl "mock"layabiliriz?</strong></summary>
+  <br>
+  
+
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2.3. Assert işlemleri: Beklenen ve gerçek değerleri doğrulama yöntemleri.</strong></summary>
+  <br>
+  
+
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2.4. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
+  <br>
+  
+
 
   
 </details>
