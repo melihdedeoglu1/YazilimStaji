@@ -60,6 +60,15 @@ namespace PaymentService.Controllers
             return NoContent();
         }
 
+        [HttpPost("refund")]
+        public async Task<IActionResult> Refund([FromBody] Guid orderId)
+        {
+            var result = await _paymentServices.RefundPaymentAsync(orderId);
+            if (!result)
+                return NotFound("Ödeme bulunamadı veya zaten iade edilmiş.");
+
+            return Ok(new { message = "Ödeme iadesi başarılı." });
+        }
 
     }
 }

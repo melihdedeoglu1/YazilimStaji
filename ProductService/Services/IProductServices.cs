@@ -10,6 +10,6 @@ namespace ProductService.Services
         public Task<Product> CreateProductAsync(ProductCreateDto productCreateDto);
 
         public Task<Product> DecreaseStockAsync(int id, int quantity);
-        //public Task<Product> IncreaseStockAsync(int id, int quantity);
+        public Task<Product> IncreaseStockAsync(int id, int quantity);
     }
 }

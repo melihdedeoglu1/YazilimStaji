@@ -2,75 +2,144 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Kargo Durumu</title>
+    <title>Kargo Takibi</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #shippingInfo {
+            margin-top: 20px;
+            font-size: 18px;
+            white-space: pre-line;
+        }
+
+        #cancelSection {
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #c82333;
+            }
+    </style>
 </head>
 <body>
-    <h1>Kargo Takip</h1>
+    <h1>Kargo Durumu</h1>
     <p id="shippingInfo">Yükleniyor...</p>
-    <div id="cancelSection" style="margin-top:20px;"></div>
+    <div id="cancelSection"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const orderId = params.get("orderId");
-        const customerId = params.get("customerId");
         const token = localStorage.getItem("token");
 
-        // Kargo durumunu getir
-        fetch(`https://localhost:7061/api/shipping/${orderId}`, {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        })
-        .then(res => {
-            if (!res.ok) throw new Error("Kargo bilgisi alınamadı");
-            return res.json();
-        })
-            .then(data => {
-                console.log("Shipping response:", data);
-            const statusMap = {
-                "Hazirlaniyor": "Hazırlanıyor",
-                "KargoyaVerildi": "Kargoya Verildi",
-                "TeslimEdildi": "Teslim Edildi",
-                "IptalEdildi": "İptal Edildi"
-            };
-
-            const status = statusMap[data.status];
-            document.getElementById("shippingInfo").innerText =
-                `Sipariş ID: ${data.orderId}\nDurum: ${status}`;
-
-            // Eğer teslim edilmediyse iptal butonu ekle
-            if (data.status !== 2 && data.status !== 3) {
-                document.getElementById("cancelSection").innerHTML = `
-                    <button onclick="cancelOrder()">❌ Siparişim Gelmedi</button>
-                `;
-            }
-        })
-        .catch(err => {
-            document.getElementById("shippingInfo").innerText = "❌ " + err.message;
-        });
-
-        function cancelOrder() {
-            if (!confirm("Siparişi iptal etmek istediğinize emin misiniz?")) return;
-
-            fetch(`https://localhost:7061/api/shipping/cancel/${orderId}`, {
-                method: "PATCH",
+        function fetchShippingStatus() {
+            fetch(`https://localhost:7061/api/shipping/${orderId}`, {
+                method: "GET",
                 headers: {
                     "Authorization": "Bearer " + token
                 }
             })
-            .then(res => {
-                if (!res.ok) throw new Error("İptal başarısız");
-                return res.json();
-            })
-            .then(() => {
-                alert("Sipariş başarıyla iptal edildi. Ücret iadesi yapılacaktır.");
-                window.location.reload();
-            })
-            .catch(err => {
-                alert("❌ " + err.message);
-            });
+                .then(res => {
+                    if (!res.ok) throw new Error("Kargo bilgisi alınamadı");
+                    return res.json();
+                })
+                .then(data => {
+                    const statusMap = {
+                        "Hazirlaniyor": "Hazırlanıyor",
+                        "KargoyaVerildi": "Kargoya Verildi",
+                        "TeslimEdildi": "Teslim Edildi",
+                        "IptalEdildi": "İptal Edildi"
+                    };
+                    const statusText = statusMap[data.status];
+                    document.getElementById("shippingInfo").innerText =
+                        `Sipariş ID: ${data.orderId}\nDurum: ${statusText}`;
+
+                    if (data.status !== "TeslimEdildi" && data.status !== "IptalEdildi") {
+                        document.getElementById("cancelSection").innerHTML = `
+                                <button onclick="cancelOrderManually()">❌ Siparişim Gelmedi - İptal Et</button>
+                            `;
+                    }
+                })
+                .catch(err => {
+                    document.getElementById("shippingInfo").innerText = "❌ " + err.message;
+                });
         }
+
+        async function cancelOrderManually() {
+            if (!confirm("Siparişi iptal etmek istediğinize emin misiniz?")) return;
+
+            try {
+                
+                const refund = await fetch(`https://localhost:7281/api/payment/refund`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(orderId)
+                });
+
+                if (!refund.ok) throw new Error("Ödeme iadesi başarısız.");
+
+                
+                const rollback = await fetch(`https://localhost:7244/api/ordersaga/rollback-stock`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ orderId: orderId })
+                });
+
+                if (!rollback.ok) throw new Error("Stok iadesi başarısız.");
+
+                
+                const cancel = await fetch(`https://localhost:7096/api/order/cancel/${orderId}`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!cancel.ok) throw new Error("Sipariş iptal edilemedi.");
+
+                alert("✅ Sipariş başarıyla iptal edildi ve işlemler geri alındı.");
+
+                const shipcancel = await fetch(`https://localhost:7061/api/shipping/cancel/${orderId}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!shipcancel.ok) throw new Error("Sipariş bilgileri iptal edilemedi.");
+
+                alert("✅ Sipariş bilgileri başarıyla iptal edildi.");
+                window.location.reload();
+
+            } catch (err) {
+                alert("❌ " + err.message);
+            }
+        }
+
+        fetchShippingStatus();
     </script>
 </body>
 </html>

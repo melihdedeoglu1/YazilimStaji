@@ -8,5 +8,6 @@ namespace ShippingService.Services
         Task<Shipping?> GetShippingByOrderIdAsync(Guid orderId);
         Task<bool> UpdateShippingStatusAsync(Guid orderId, ShippingStatus newStatus);
         Task<bool> CancelShippingAsync(Guid orderId);
+        Task<List<Shipping>> GetShippingByCustomerIdAsync(Guid customerId);
     }
 }

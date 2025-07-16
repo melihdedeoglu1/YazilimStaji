@@ -61,5 +61,14 @@ namespace ShippingService.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Shipping>> GetShippingByCustomerIdAsync(Guid customerId)
+        {
+            return await _context.Shippings.Where(s => s.CustomerId == customerId).ToListAsync();
+        }
+
+
+
+
     }
 }

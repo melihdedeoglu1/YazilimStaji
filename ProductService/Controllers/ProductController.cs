@@ -72,6 +72,21 @@ namespace ProductService.Controllers
             return Ok(updatedProduct);
         }
 
+        [HttpPatch("{id}/increase-stock")]
+        public async Task<IActionResult> IncreaseStock(int id, [FromQuery] int quantity)
+        {
+            if (quantity <= 0)
+            {
+                return BadRequest("Quantity must be greater than zero.");
+            }
+            var updatedProduct = await _productService.IncreaseStockAsync(id, quantity);
+            if (updatedProduct == null)
+            {
+                return NotFound("Product not found.");
+            }
+            return Ok(updatedProduct);
+        }
+
 
     }
 }

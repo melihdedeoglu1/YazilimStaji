@@ -49,5 +49,18 @@ namespace ProductService.Services
             await _context.SaveChangesAsync();
             return product;
         }
+
+        public async Task<Product> IncreaseStockAsync(int id, int quantity)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return null; // or throw an exception
+            }
+            product.StockQuantity += quantity;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
     }
 }

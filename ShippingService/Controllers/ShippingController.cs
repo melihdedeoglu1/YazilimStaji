@@ -54,5 +54,15 @@ namespace ShippingService.Controllers
             return Ok(new { message = "Kargo durumu iptal edildi." });
         }
 
+
+        [HttpGet("customer/{customerId}")]
+        public async Task<IActionResult> GetShippingByCustomerId(Guid customerId)
+        {
+            var shippings = await _shippingServices.GetShippingByCustomerIdAsync(customerId);
+            if (shippings == null || !shippings.Any())
+                return NotFound("Bu müşteri için kargo bilgisi bulunamadı.");
+            return Ok(shippings);
+        }
+
     }
 }

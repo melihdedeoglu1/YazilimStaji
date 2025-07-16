@@ -71,6 +71,30 @@ namespace PaymentService.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> RefundPaymentAsync(Guid orderId)
+        {
+            var payment = await _context.Payments.FirstOrDefaultAsync(p => p.OrderId == orderId);
+
+            if (payment == null || payment.IsSuccess != true)
+                return false;
+
+            // Customer bakiyesini geri artır (Age = Balance)
+            var request = new HttpRequestMessage(HttpMethod.Patch,
+                $"https://localhost:7068/api/customer/{payment.CustomerId}/increase-balance?amount={payment.Amount}");
+
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await _client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+                return false;
+
+            // Payment kaydını başarısız olarak işaretle
+            payment.IsSuccess = false;
+            _context.Payments.Update(payment);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
 
     }
 }

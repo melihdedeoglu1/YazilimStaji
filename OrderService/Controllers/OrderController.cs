@@ -17,19 +17,7 @@ namespace OrderService.Controllers
         {
             _orderServices = orderServices;
         }
-        /*
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateOrderAsync([FromBody] CreateOrderDto createOrderDto)
-        {
-            if (createOrderDto == null || createOrderDto.Items == null || !createOrderDto.Items.Any())
-            {
-                return BadRequest("Invalid order data.");
-            }
-            var order = await _orderServices.CreateOrderAsync(createOrderDto);
-            return CreatedAtAction(nameof(CreateOrderAsync), new { id = order.Id }, order);
-
-        }
-        */
+        
         [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateOrderDto createOrderDto)
@@ -59,6 +47,38 @@ namespace OrderService.Controllers
             });
         }
 
+        [HttpPost("cancel/{orderId}")]
+        public async Task<IActionResult> CancelOrder(Guid orderId)
+        {
+            var result = await _orderServices.CancelOrderAsync(orderId);
+            if (!result)
+                return NotFound("Sipariş bulunamadı veya zaten silinmiş.");
+
+            return Ok(new { message = "Sipariş iptal edildi." });
+        }
+
+
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetOrderDetails(Guid id)
+        {
+            var order = await _orderServices.GetOrderByIdAsync(id);
+
+            if (order == null)
+                return NotFound("Sipariş bulunamadı.");
+
+            var dto = new OrderDetailsDto
+            {
+                OrderId = order.Id,
+                CustomerId = order.CustomerId,
+                Items = order.Items.Select(i => new CreateOrderItemDto
+                {
+                    ProductId = i.ProductId,
+                    Quantity = i.Quantity
+                }).ToList()
+            };
+
+            return Ok(dto);
+        }
 
     }
 }

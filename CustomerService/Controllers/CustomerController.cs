@@ -71,6 +71,11 @@ namespace CustomerService.Controllers
             });
         }
 
+
+
+
+
+
         [HttpPatch("{id}/decrease-balance")]
         public async Task<IActionResult> DecreaseBalance(Guid id, [FromQuery] int amount)
         {
@@ -81,13 +86,24 @@ namespace CustomerService.Controllers
             if (customer.Age < amount)
                 return BadRequest("Yetersiz bakiye.");
 
-            customer.Age -= amount; // 👈 Buradaki Age senin bakiyen oluyor
+            customer.Age -= amount; 
             await _customerService.UpdateAsync(customer);
 
             return Ok(customer);
         }
 
+        [HttpPatch("{id}/increase-balance")]
+        public async Task<IActionResult> IncreaseBalance(Guid id, [FromQuery] int amount)
+        {
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null)
+                return NotFound("Müşteri bulunamadı.");
 
+            customer.Age += amount; 
+            await _customerService.UpdateAsync(customer);
+
+            return Ok(customer);
+        }
 
 
 

@@ -9,5 +9,6 @@ namespace OrderService.Services
     {
         Task<Order> CreateOrderAsync(CreateOrderDto createOrderDto);       
         Task<Order> GetOrderByIdAsync(Guid orderId);
+        Task<bool> CancelOrderAsync(Guid orderId);
     }
 }

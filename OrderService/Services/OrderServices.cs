@@ -48,5 +48,26 @@ namespace OrderService.Services
                 .Include(o => o.Items)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
+
+        public async Task<bool> CancelOrderAsync(Guid orderId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+                return false;
+
+            // Önce ilişkili OrderItem'ları sil
+            _context.OrderItems.RemoveRange(order.Items);
+
+            // Sonra Order'ı sil
+            _context.Orders.Remove(order);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 }

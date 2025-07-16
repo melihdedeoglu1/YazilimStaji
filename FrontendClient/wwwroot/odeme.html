@@ -1,102 +1,109 @@
 ﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Ödeme Sayfası</title>
-</head>
-<body>
-    <h1>Ödeme Sayfası</h1>
-    <p id="orderInfo"></p>
-    <p id="amountInfo">Yükleniyor...</p>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 30px;
+        }
 
-    <label for="address">Adres ID Giriniz:</label>
-    <input type="text" id="address" placeholder="örn: adres-1">
-    <button id="payButton" style="display:none;">Ödemeyi Yap ve Gönder</button>
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-    <div id="paymentStatus"></div>
+        h2 {
+            color: #007bff;
+        }
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const orderId = params.get("orderId");
-        const customerId = params.get("customerId");
-        const token = localStorage.getItem("token");
-        let currentAmount = 0;
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
 
-        document.getElementById("orderInfo").textContent =
-            "Sipariş ID: " + orderId + " | Müşteri ID: " + customerId;
-
-        // 1️⃣ Tutarı al
-        fetch(`https://localhost:7096/api/order/${orderId}/total`, {
-            headers: { "Authorization": "Bearer " + token }
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("Toplam tutar alınamadı");
-                return response.json();
-            })
-            .then(data => {
-                currentAmount = data.totalAmount;
-                document.getElementById("amountInfo").innerText =
-                    "Toplam Tutar: " + currentAmount + " ₺";
-                document.getElementById("payButton").style.display = "inline-block";
-            })
-            .catch(err => {
-                document.getElementById("amountInfo").innerText = "❌ " + err.message;
-            });
-
-        // 2️⃣ Butona tıklanınca ödeme ve shipping
-        document.getElementById("payButton").addEventListener("click", () => {
-            const addressId = document.getElementById("address").value.trim();
-            if (!addressId) {
-                alert("Adres bilgisi gereklidir.");
-                return;
+            .btn:hover {
+                background: #218838;
             }
 
-            const paymentData = { orderId, customerId, amount: currentAmount };
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Ödeme Onayı</h2>
+        <p>Toplam Tutar: <strong id="totalPrice">₺0</strong></p>
+        <button class="btn" onclick="confirmPayment()">Ödemeyi Onayla</button>
+        <p id="status"></p>
+    </div>
 
-            // Önce ödeme
-            fetch("https://localhost:7281/api/payment/payments", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
-                },
-                body: JSON.stringify(paymentData)
-            })
-                .then(response => {
-                    if (!response.ok) return response.text().then(text => {
-                        throw new Error("Ödeme başarısız: " + text);
-                    });
-                    return response.json();
-                })
-                .then(() => {
-                    // Sonra shipping
-                    const shippingData = { customerId, orderId, addressId };
+    <script>
+        const customerId = localStorage.getItem("customerId");
+        const token = localStorage.getItem("token");
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const addressId = localStorage.getItem("addressId");
 
-                    return fetch("https://localhost:7061/api/shipping", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": "Bearer " + token
-                        },
-                        body: JSON.stringify(shippingData)
-                    });
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("Kargo oluşturulamadı");
-                    return response.json();
-                })
-                .then(() => {
-                    document.getElementById("paymentStatus").innerHTML =
-                        "<p style='color:green'>✅ Ödeme ve kargo tamamlandı. Yönlendiriliyorsunuz...</p>";
-                    setTimeout(() => {
-                        window.location.href = `shipping.html?orderId=${orderId}&customerId=${customerId}`;
-                    }, 1500);
-                })
-                .catch(error => {
-                    document.getElementById("paymentStatus").innerHTML =
-                        "<p style='color:red'>❌ " + error.message + "</p>";
+        let total = 0;
+        cart.forEach(p => total += p.price * p.quantity);
+        document.getElementById("totalPrice").textContent = "₺" + total;
+
+        async function confirmPayment() {
+            const orderId = localStorage.getItem("orderId");
+            const addressId = localStorage.getItem("addressId");
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const items = cart.map(p => ({ productId: parseInt(p.id), quantity: p.quantity, price: p.price }));
+
+            const body = {
+                orderId,
+                customerId,
+                addressId,
+                items
+            };
+
+            try {
+                const res = await fetch("https://localhost:7244/api/ordersaga/complete-order", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body)
                 });
-        });
+
+                if (!res.ok) {
+                    const msg = await res.text();
+                    document.getElementById("status").textContent = "❌ İşlem başarısız: " + msg;
+                    return;
+                }
+
+                document.getElementById("status").textContent = "✅ Sipariş tamamlandı!";
+                localStorage.removeItem("cart");
+                localStorage.removeItem("addressId");
+                localStorage.removeItem("orderId");
+
+                setTimeout(() => {
+                    window.location.href = `shipping.html?orderId=${orderId}&customerId=${customerId}`;
+                }, 2500);
+            } catch (err) {
+                document.getElementById("status").textContent = "❌ Hata: " + err.message;
+            }
+        }
+
     </script>
 </body>
 </html>
