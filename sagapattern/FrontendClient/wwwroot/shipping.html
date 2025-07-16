@@ -86,7 +86,7 @@
             if (!confirm("Siparişi iptal etmek istediğinize emin misiniz?")) return;
 
             try {
-                
+
                 const refund = await fetch(`https://localhost:7281/api/payment/refund`, {
                     method: "POST",
                     headers: {
@@ -98,7 +98,7 @@
 
                 if (!refund.ok) throw new Error("Ödeme iadesi başarısız.");
 
-                
+
                 const rollback = await fetch(`https://localhost:7244/api/ordersaga/rollback-stock`, {
                     method: "POST",
                     headers: {
@@ -110,7 +110,7 @@
 
                 if (!rollback.ok) throw new Error("Stok iadesi başarısız.");
 
-                
+
                 const cancel = await fetch(`https://localhost:7096/api/order/cancel/${orderId}`, {
                     method: "POST",
                     headers: {

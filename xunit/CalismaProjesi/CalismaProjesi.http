@@ -1,0 +1,6 @@
+@CalismaProjesi_HostAddress = http://localhost:5290
+
+GET {{CalismaProjesi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
