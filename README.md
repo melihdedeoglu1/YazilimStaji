@@ -71,9 +71,10 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   **Kullanılan Kütüphaneler:** xUnit ve Moq.
 
   **Test Yazma Adımları:** Arrange(Hazırlık işlemleri), Act(Test edilmek istenen fonksiyonun çağrılma işlemleri), Assert(Act aşamasındaki sonuçların beklenen değerlerle karşılaştırma işlemleri). Bu adımlarla test yazılmış olur. Parametreli olup olmadığına göre [Fact] ve [Theory] özelliği eklenir.
-
   <br>
+  
    ![ornek](ornektest.png)
+   
 </details>
 
 ---
