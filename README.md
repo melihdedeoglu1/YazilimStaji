@@ -65,6 +65,13 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 <details>
   <summary><strong>1.	.NET platformunda unit test yapma sürecini açıklayın ve örnek olarak Xunit ve Moq kütüphanelerini kullanarak bir unit test yazın</strong></summary>
   <br> 
+  **Süreç:** NET platformunda unit test, uygulamanın en küçük birimlerini (fonksiyon, servis, repository vb.) izole biçimde test ederek doğruluğunu kontrol etme sürecidir. Bu süreçte amaç, yazılımın her bileşeninin tek başına doğru çalıştığını garanti altına almaktır.
+
+  **Kullanılan Kütüphaneler:** xUnit ve Moq.
+
+  **Test Yazma Adımları:** Arrange(Hazırlık işlemleri), Act(Test edilmek istenen fonksiyonun çağrılma işlemleri), Assert(Act aşamasındaki sonuçların beklenen değerlerle karşılaştırma işlemleri). Bu adımlarla test yazılmış olur. Parametreli olup olmadığına göre [Fact] ve [Theory] özelliği eklenir.
+
+  <br>
   
 </details>
 
