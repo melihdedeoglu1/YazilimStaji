@@ -12,7 +12,7 @@ namespace CalismaProjesi.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<List<Product>> GetAllProductsAsync()
         {
             return await _context.Products.ToListAsync();
         }
@@ -24,6 +24,9 @@ namespace CalismaProjesi.Services
 
         public async Task<Product> CreateProductAsync(Product product)
         {
+            if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
+                throw new Exception("Ürün bilgileri geçersiz");
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return product;
