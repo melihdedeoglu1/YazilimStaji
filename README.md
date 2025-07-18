@@ -124,7 +124,9 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>2.2. Mocked object üretme: Testlerde bağımlılıkları izole etmek için nesneleri nasıl "mock"layabiliriz?</strong></summary>
   <br>
   
+  .NET testlerinde dış bağımlılıkları (veritabanı, API, servisler, mapper vb.) izole etmek için Moq kütüphanesi kullanılır. Bu sayede test edilen sınıf sadece kendi iç mantığına odaklanır ve dış dünyaya olan bağımlılıkları sahte (mock) nesnelerle değiştirilir.
 
+  
 
   
 </details>
