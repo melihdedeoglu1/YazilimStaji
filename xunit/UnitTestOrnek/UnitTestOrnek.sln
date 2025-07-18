@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestOrnek", "UnitTestOrnek.csproj", "{AC8B959C-F226-44F0-A03A-9AB056C83C04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestOrnek.Tests", "..\UnitTestOrnek.Tests\UnitTestOrnek.Tests.csproj", "{7694035E-E6F7-468D-9DAD-2C5085E47C38}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC8B959C-F226-44F0-A03A-9AB056C83C04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8B959C-F226-44F0-A03A-9AB056C83C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8B959C-F226-44F0-A03A-9AB056C83C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8B959C-F226-44F0-A03A-9AB056C83C04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7694035E-E6F7-468D-9DAD-2C5085E47C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7694035E-E6F7-468D-9DAD-2C5085E47C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7694035E-E6F7-468D-9DAD-2C5085E47C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7694035E-E6F7-468D-9DAD-2C5085E47C38}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BABD37D-0489-4FEB-88B0-BB418D3DE91C}
+	EndGlobalSection
+EndGlobal
