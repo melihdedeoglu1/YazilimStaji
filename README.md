@@ -125,8 +125,16 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <br>
   
   .NET testlerinde dış bağımlılıkları (veritabanı, API, servisler, mapper vb.) izole etmek için Moq kütüphanesi kullanılır. Bu sayede test edilen sınıf sadece kendi iç mantığına odaklanır ve dış dünyaya olan bağımlılıkları sahte (mock) nesnelerle değiştirilir.
-
+  <br>
   
+  ![mock1](mock1.png)
+
+  Yukarıdaki yapı sayesinde: Gerçek bir veritabanı bağlantısı kurulmadan test yapılabilir.
+  
+  <br>
+  Verify() metodu ile gerçekten çağrılıp çağrılmadığı test edilebilir:
+  
+  ![mock2](mock2.png)
 
   
 </details>
