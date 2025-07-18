@@ -172,3 +172,25 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   
 </details>
+
+---
+
+<details>
+  <summary><strong>3.1. Repository sınıfları için bir CRUD yapısı kurarak testler yazın. Bu süreçte Entity Framework Core kullanarak basit bir CRUD işlemi hazırlayın.</strong></summary>
+  <br>
+  
+
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>3.2. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
+  <br>
+  
+
+
+  
+</details>
