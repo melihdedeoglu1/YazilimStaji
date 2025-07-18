@@ -125,8 +125,16 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <br>
   
   .NET testlerinde dış bağımlılıkları (veritabanı, API, servisler, mapper vb.) izole etmek için Moq kütüphanesi kullanılır. Bu sayede test edilen sınıf sadece kendi iç mantığına odaklanır ve dış dünyaya olan bağımlılıkları sahte (mock) nesnelerle değiştirilir.
-
+  <br>
   
+  ![mock1](mock1.png)
+
+  Yukarıdaki yapı sayesinde: Gerçek bir veritabanı bağlantısı kurulmadan test yapılabilir.
+  
+  <br>
+  Verify() metodu ile gerçekten çağrılıp çağrılmadığı test edilebilir:
+  
+  ![mock2](mock2.png)
 
   
 </details>
@@ -137,6 +145,29 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>2.3. Assert işlemleri: Beklenen ve gerçek değerleri doğrulama yöntemleri.</strong></summary>
   <br>
   
+  Assert işlemleri, test edilen fonksiyonun gerçekten beklenen sonucu üretip üretmediğini kontrol etmek için kullanılır. xUnit kütüphanesi bu doğrulamalar için birçok yerleşik Assert metodu sağlar.
+  Testlerdeki ana amaç; verilen bir girdiyle, beklenen çıktının elde edilip edilmediğini kontrol etmektir.
+  <br>
+
+  ![assert1](assert1.png)
+  
+  ![mock2](mock2.png)
+
+  <br>
+  Bu kontroller sayesinde hem dönüş değerleri hem de arka planda hangi fonksiyonların çağrıldığı net olarak doğrulanmış olur.
+  Assert işlemleri sayesinde testler fail olduğunda, hangi kısmın bozulduğu kolayca anlaşılır.
+  Geliştirilen metodun mantıksal hatalarını erken aşamada tespit etmemizi sağlar.
+  İleride kodda bir değişiklik yapıldığında, bu testler sayesinde geriye dönük bozulmalar (regression) kolayca yakalanır.
+
+
+</details>
+
+---
+
+<details>
+  <summary><strong>2.4. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
+  <br>
+  
 
 
   
@@ -145,7 +176,18 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 ---
 
 <details>
-  <summary><strong>2.4. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
+  <summary><strong>3.1. Repository sınıfları için bir CRUD yapısı kurarak testler yazın. Bu süreçte Entity Framework Core kullanarak basit bir CRUD işlemi hazırlayın.</strong></summary>
+  <br>
+  
+
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>3.2. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
   <br>
   
 
