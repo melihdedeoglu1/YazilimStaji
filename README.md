@@ -145,9 +145,21 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>2.3. Assert işlemleri: Beklenen ve gerçek değerleri doğrulama yöntemleri.</strong></summary>
   <br>
   
+  Assert işlemleri, test edilen fonksiyonun gerçekten beklenen sonucu üretip üretmediğini kontrol etmek için kullanılır. xUnit kütüphanesi bu doğrulamalar için birçok yerleşik Assert metodu sağlar.
+  Testlerdeki ana amaç; verilen bir girdiyle, beklenen çıktının elde edilip edilmediğini kontrol etmektir.
+  <br>
 
-
+  ![assert1](assert1.png)
   
+  ![mock2](mock2.png)
+
+  <br>
+  Bu kontroller sayesinde hem dönüş değerleri hem de arka planda hangi fonksiyonların çağrıldığı net olarak doğrulanmış olur.
+  Assert işlemleri sayesinde testler fail olduğunda, hangi kısmın bozulduğu kolayca anlaşılır.
+  Geliştirilen metodun mantıksal hatalarını erken aşamada tespit etmemizi sağlar.
+  İleride kodda bir değişiklik yapıldığında, bu testler sayesinde geriye dönük bozulmalar (regression) kolayca yakalanır.
+
+
 </details>
 
 ---
