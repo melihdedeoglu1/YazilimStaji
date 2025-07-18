@@ -178,9 +178,22 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 <details>
   <summary><strong>3.1. Repository sınıfları için bir CRUD yapısı kurarak testler yazın. Bu süreçte Entity Framework Core kullanarak basit bir CRUD işlemi hazırlayın.</strong></summary>
   <br>
+
+  ![repo1](repo1.png)
+
+  ![repo2](repo2.png)
+
+  ![repotest1](repotest1.png)
+
+  ![repotest2](repotest2.png)
+
+  ![repotest3](repotest3.png)
+
+  ![repotest4](repotest4.png)
+
+  ![repotest5](repotest5.png)
   
-
-
+  ![repotest6](repotest6.png)
   
 </details>
 
