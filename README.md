@@ -200,7 +200,18 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 ---
 
 <details>
-  <summary><strong>3.2. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
+  <summary><strong>3.2. Mapper’ı ve veritabanını mocklama işlemlerini nasıl yapacağınızı gösterin.</strong></summary>
+  <br>
+  
+
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>3.3. Yerel bir veritabanı (MSSQL) kullanarak Visual Studio 2022'nin SQL Object Explorer'ı üzerinden bağlantı kurarak CRUD işlemlerini gerçekleştirin.</strong></summary>
   <br>
   
 
