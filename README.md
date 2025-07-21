@@ -288,6 +288,19 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>1. Microservice’lerde API Gateway kullanımı. Avantajları, hangi durumlarda kullanılması gerektiği ve farklı API Gateway araçları hakkında bilgi verin (Kong, Zuul, Ocelot, vs.).</strong></summary>
   <br>
 
+  ***API Gateway:**** Gateway, Client tarafından servislerimize gelen istekleri karşılayan yapılar olarak nitelendirilir. API Gateway Client tarafından istekleri alıp servislere iletir. Bu sayede Client tarafından servisler için herhangi bir port bilgisinin bilinmesine gerek kalmaz. Client ve Gateway arasında sıkı bir bağımlılık vardır.
+
+  ***API Gateway Avantajları:*** Gelen isteklerin izlenmesi analiz edilmesi, API'leri güvenli bir şekilde yönetebilmek, servislere gelen istekleri mikroservisler arasında eşit şekilde dağıtarak yükü dengeleyebilir, sık kullanılan istekleri önbelleğe alarak performansı arttırabilir.
+
+  ***API Gateway Dezavantajları:*** Gateway servislerin merkezi konumunda olduğu için Gateway'de çıkan bir sorun tüm sistemi etkileyebilir. Sistem yönetimini karmaşıklaştırabilir ve iş yükünü arttırabilir. Ölçeklenebilirlik açısından zorluklar yaratabilir. Yüksek trafikli uygulamalarda API Gateway performansı sorun olabilir.
+
+  ***Hangi durumlarda kullanılması gerekir?:*** Mikroservis mimarisi kullanıldığında, farklı istemciler için tek noktadan yönetim istenildiğinde, istek yönlendirme gerektiğinde, protokol dönüşümü gerektiğinde, isteklerin tek noktadan loglanması ve izlenilmesi istenildiğinde, güvenlik ve kimlik doğrulama mekanizmalarının merkezi yönetimi için vb. .
+
+  ***Farklı API Gateway araçları:***
+
+  -**Kong:** Açık kaynaklıdır, Yüksek performanslıdır, NGINX tabanlıdır, Plugin mimarisi ile özelleştirilebilir, JWT,rate limiting gibi özelliklere sahiptir.
+
+  -**
   
 </details>
 
@@ -308,6 +321,20 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 <details>
   <summary><strong>1. Aggregate, Entity, Value Object, Bounded Context, Repository gibi temel DDD kavramlarını açıklayın.</strong></summary>
   <br>
+
+  ***Aggregate:*** İlgili olayları bir araya getiren ve bir bütün olarak ele alınan bir yapıdır. Tek bir işlem birimi, bir varlık veya bir nesne olarak düşünülebilir. Örnek e-ticaret uygulamasında her bir sipariş, bir Aggregate'dir.
+
+  ***Entity:*** Kendine ait unique bir kimliği olan nesneler Entity olarak adlandırılır. DDD iş mantığını servislere değil, entitylere verir.
+
+  ***Value Object:*** Entity'nin tam tersi olarak kendine ait unique bir kimliği olmayan nesneler Value Object olarak adlandırılır.
+
+  ***Bounded Context:*** Domainde yer alan iş kuralları çerçevesinde mantıksal açıdan birbirleri ile en alakalı olanların bir araya gelerek gruplaştığı ve bu grubun sorumluluklarının net bir şekilde belirlenmiş olduğu yapılara Bounded Context denir.
+
+  ***Aggregate Root(AR):*** Yapı içerisindeki diğer Entity'lerin koordinasyonunun sağlayacak yönetici Entity seçilir ve bu seçim AR'u işaret eder. AR diğer AR'nin Entity'si ile iletişime geçemez. Sadece AR'ler birbiri ile iletişim kurmalıdır.
+  
+  ***Repository:*** Bir Aggregate içerisindeki bütün Entity ve Value Object'lerin taşıdığı bilgilerin veritabanına yazılması amacı ile kullanılan kavramdır. Her bir AR için Repository oluşturulur.
+
+  ***Layered Architecture:*** Domain Layer, Application Layer, Presentation Layer, Infrastructure Layer.
 
   
 </details>
