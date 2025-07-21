@@ -1,7 +1,7 @@
 # YazilimStaji
 Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığım çalışmalar.
 
-## Saga Pattern
+## Saga Pattern 
 
 <details>
   <summary><strong>1. Saga pattern mikroservis mimarisinde hangi sorunları çözmeye çalışır?</strong></summary>
@@ -220,8 +220,88 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 <details>
   <summary><strong>3.3. Yerel bir veritabanı (MSSQL) kullanarak Visual Studio 2022'nin SQL Object Explorer'ı üzerinden bağlantı kurarak CRUD işlemlerini gerçekleştirin.</strong></summary>
   <br>
-  
 
+
+</details>
+
+
+
+## Application Monitoring - Event Sourcing - CQRS
+
+
+<details>
+  <summary><strong>1. Application Monitoring nedir? Elastic search nedir?</strong></summary>
+  <br>
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2. Event Sourcing Nedir?: Microservice mimarisinde Event Sourcing nedir, ne zaman kullanılır, avantajları ve zorlukları nelerdir?</strong></summary>
+  <br>
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>3. CQRS (Command Query Responsibility Segregation) Nedir?: CQRS ile Event Sourcing'in ilişkisi, kullanımı ve getirisi hakkında bilgi verin.
+</strong></summary>
+  <br>
+
+  
+</details>
+
+
+
+## API Gateway ve BFF (Backend For Frontend)
+
+
+<details>
+  <summary><strong>1. Microservice’lerde API Gateway kullanımı. Avantajları, hangi durumlarda kullanılması gerektiği ve farklı API Gateway araçları hakkında bilgi verin (Kong, Zuul, Ocelot, vs.).</strong></summary>
+  <br>
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2. Frontend ve Backend arasındaki ilişkilerde BFF tasarımı. Kullanıcı arayüzüne özgü servislerin nasıl sunulacağını açıklayın.</strong></summary>
+  <br>
+
+  
+</details>
+
+
+
+## Domain-Driven Design (DDD)
+
+
+<details>
+  <summary><strong>1. Aggregate, Entity, Value Object, Bounded Context, Repository gibi temel DDD kavramlarını açıklayın.</strong></summary>
+  <br>
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2. Domain-Driven Design’i, microservice mimarisiyle nasıl birleştirebileceğinizi anlatın. Bir domain model oluşturun ve bu modeli servisler arasında nasıl paylaşacağınızı açıklayın.</strong></summary>
+  <br>
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>3.  DDD ile CQRS ve Event Sourcing’i nasıl entegre edebileceğinizi açıklayın.</strong></summary>
+  <br>
 
   
 </details>
