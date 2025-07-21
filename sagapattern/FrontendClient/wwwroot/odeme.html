@@ -56,6 +56,7 @@
 <body>
     <div class="container">
         <h2>Ödeme Onayı</h2>
+        
         <p>Toplam Tutar: <strong id="totalPrice">₺0</strong></p>
         <button class="btn" onclick="confirmPayment()">Ödemeyi Onayla</button>
         <button class="btn cancel" onclick="cancelOrder()">Ödemeyi İptal Et</button>
@@ -63,6 +64,8 @@
     </div>
 
     <script>
+
+
         const customerId = localStorage.getItem("customerId");
         const token = localStorage.getItem("token");
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -72,6 +75,8 @@
         let total = 0;
         cart.forEach(p => total += p.price * p.quantity);
         document.getElementById("totalPrice").textContent = "₺" + total;
+
+
 
         async function confirmPayment() {
             const items = cart.map(p => ({
