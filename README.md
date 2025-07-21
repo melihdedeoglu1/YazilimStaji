@@ -210,7 +210,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   ![mock4](images/mock4.png)
 
-  [mock2](images/mock2.png)
+  ![mock2](images/mock2.png)
 
   
 </details>
@@ -233,11 +233,11 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>1. Application Monitoring nedir? Elastic search nedir?</strong></summary>
   <br>
 
-  **Application Performance Monitoring(Uygulama Performans İzleme):** Bir uygulamanın düzgün çalıştığından emin olmak için performansını, kullanılabilirliğini ve son kullanıcı deneyimini izleme sürecidir. APM, tatmin edici bir kullanıcı deneyimi sunmak ve müşteri hizmetleri sorunlarını veya şikayetlerini önlemek için hayati önem taşır. 
+  ***Application Performance Monitoring(Uygulama Performans İzleme):*** Bir uygulamanın düzgün çalıştığından emin olmak için performansını, kullanılabilirliğini ve son kullanıcı deneyimini izleme sürecidir. APM, tatmin edici bir kullanıcı deneyimi sunmak ve müşteri hizmetleri sorunlarını veya şikayetlerini önlemek için hayati önem taşır. 
 
   Ağ üzerindeki veri iletimlerinin gerçek zamanlı G/Ç paket taramasına dayanır. Verilerin analiz edilmesi ve ilişkilendirilmesi, performans sorunlarını tespit etmeyi ve teşhis etmeyi mümkün kılar.
 
-  **Elastic Search:** Büyük miktarda gerçek zamanlı veriyi toplayabilen, işleyebilen, depolayabilen, analiz edebilen ve görselleştirebilen açık kaynaklı bir arama ve analiz motorudur.
+  ***Elastic Search:*** Büyük miktarda gerçek zamanlı veriyi toplayabilen, işleyebilen, depolayabilen, analiz edebilen ve görselleştirebilen açık kaynaklı bir arama ve analiz motorudur.
 
 
   Elastic Stack, Logstash, Elasticsearch ve Kibana'dan oluşur. Logstash, tüm ham verileri toplayıp, indeksleyip Elasticsearch'te depolamadan önce işlemekten sorumludur. İndeksleme işleminden sonra, veriler üzerinde karmaşık sorgular çalıştırabilir ve verilerin karmaşık özetlerini almak için toplamaları kullanabiliriz.
@@ -250,7 +250,16 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>2. Event Sourcing Nedir?: Microservice mimarisinde Event Sourcing nedir, ne zaman kullanılır, avantajları ve zorlukları nelerdir?</strong></summary>
   <br>
 
-  
+  ***Event Sourcing(Olay Tabanlı Mimari):*** Sistemdeki tüm durum değişikliklerini(olayları) kaydetmeyi ve bu olaylardan sistemin durumunu oluşturmayı amaçlayan bir tasarım desenidir. 
+
+  ***Microservice mimarisinde Event Sourcing:*** Event Sourcing, sistemde gerçekleşen her işlemin (örneğin bir siparişin oluşturulması, ödemesinin yapılması, iptal edilmesi gibi) bir "event" (olay) olarak kaydedilmesidir. Bu event'ler değiştirilemez ve zamana göre sıralanır. Veritabanında sadece event'ler tutulur, sistemin son durumu bu event'lerin replay edilmesiyle hesaplanır.
+
+  ***Ne zaman kullanılır?:*** Karmaşık iş süreçlerinin ve domain mantığının bulunduğu durumlarda, sistem durumlarının geçmişini detaylı olarak izlemek gerektiğinde, Event-Driven(Olay Odaklı) sistemler kurmak istendiğinde Event Sourcing kullanılır.
+
+  ***Avantajları:*** Geçmişteki olayları takip edebilme, Replay(olaylar yeniden replay edilerek sistemin geçmişteki bir hali tekrar oluşturulabilir.), performans vb. .
+
+  ***Dezavantajları:*** Komplekslik, event yapıları değişebilir sürekli yenilenmeli, eventler değiştirilemez olduğundan kişisel verilerin silinmesi zor, kullanımı zor. 
+   
 </details>
 
 ---
@@ -260,6 +269,13 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 </strong></summary>
   <br>
 
+  ***CQRS Nedir?:*** Okuma ve yazma işlemlerinin farklı modellere ayrılmasını amaçlayan tasarım desenidir. Command yazma işlemleri için, Query ise okuma işlemleri için farklı veri modellerini kullanır. 
+
+  ***CQRS - Event Sourcing ilişkisi:*** CQRS ile Event Sourcing birbirinden bağımsız kavramlar olsalar da birlikte kullanıldıklarında güçlü bir mimaridir. 
+
+  ***CQRS - Event Sourcing kullanımı:*** Command bir işlem olduğunda event üretir. Event Handler bu eventi işler ve başka servisleri tetikler. Query okuma tarafına gidecek veriyi uygun bir modele günceller. (Örnek bir senaryo) DDD, Mikroservisler, Finansal uygulamalar vb. .
+
+  ***CQRS - Event Sourcing Getirisi:*** Mimari olarak sistemin esnekliğini, ölçeklenebilirliğini ve izlenebilirliğini ciddi şekilde artırır. Örnek: DDD ile uyum, iş sürecini ve senaryoyu izleme, test edilebilirlik, bağımsız geliştirme vb. .
   
 </details>
 
