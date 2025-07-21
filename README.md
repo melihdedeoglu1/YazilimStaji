@@ -210,7 +210,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   ![mock4](images/mock4.png)
 
-  [mock2](images/mock4.png)
+  [mock2](images/mock2.png)
 
   
 </details>
@@ -233,6 +233,14 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>1. Application Monitoring nedir? Elastic search nedir?</strong></summary>
   <br>
 
+  **Application Performance Monitoring(Uygulama Performans İzleme):** Bir uygulamanın düzgün çalıştığından emin olmak için performansını, kullanılabilirliğini ve son kullanıcı deneyimini izleme sürecidir. APM, tatmin edici bir kullanıcı deneyimi sunmak ve müşteri hizmetleri sorunlarını veya şikayetlerini önlemek için hayati önem taşır. 
+
+  Ağ üzerindeki veri iletimlerinin gerçek zamanlı G/Ç paket taramasına dayanır. Verilerin analiz edilmesi ve ilişkilendirilmesi, performans sorunlarını tespit etmeyi ve teşhis etmeyi mümkün kılar.
+
+  **Elastic Search:** Büyük miktarda gerçek zamanlı veriyi toplayabilen, işleyebilen, depolayabilen, analiz edebilen ve görselleştirebilen açık kaynaklı bir arama ve analiz motorudur.
+
+
+  Elastic Stack, Logstash, Elasticsearch ve Kibana'dan oluşur. Logstash, tüm ham verileri toplayıp, indeksleyip Elasticsearch'te depolamadan önce işlemekten sorumludur. İndeksleme işleminden sonra, veriler üzerinde karmaşık sorgular çalıştırabilir ve verilerin karmaşık özetlerini almak için toplamaları kullanabiliriz.
   
 </details>
 
