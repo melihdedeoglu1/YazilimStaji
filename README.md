@@ -168,8 +168,11 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>2.4. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
   <br>
   
+  ![factornek1](images/factornek1.png)
+  
+  ![theoryornek1](images/theoryornek1.png)
 
-
+  ![theoryornek2](images/theoryornek2.png)
   
 </details>
 
