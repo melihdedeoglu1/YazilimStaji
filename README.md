@@ -1,7 +1,7 @@
 # YazilimStaji
 Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığım çalışmalar.
 
-# Saga Pattern
+## Saga Pattern
 
 <details>
   <summary><strong>1. Saga pattern mikroservis mimarisinde hangi sorunları çözmeye çalışır?</strong></summary>
@@ -60,7 +60,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 </details>
 
 
-# Xunit ve Moq
+## Xunit ve Moq
 
 <details>
   <summary><strong>1.	.NET platformunda unit test yapma sürecini açıklayın ve örnek olarak Xunit ve Moq kütüphanelerini kullanarak bir unit test yazın</strong></summary>
