@@ -43,7 +43,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>4.1. Bu süreci yönetmek için bir Saga pattern tasarlayın ve basit bir durum makinesi (state machine) diyagramı çizin. Sipariş Verildi aşamasından Sipariş Tamamlandı aşamasına kadar olan her bir durumu çizin ve her bir başarısızlık durumunda geri alma adımlarını gösterin.</strong></summary>
   <br>
 
-  ![StateMachine](statemachine.png)
+  ![StateMachine](images/statemachine.png)
   
  
 </details>
@@ -54,7 +54,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>4.2. Her bir durumda, ilgili hizmetin başarılı ya da başarısız olması durumunda nasıl bir geçiş yapılacağını açıklayın.</strong></summary>
   <br>
 
-  ![Tablo](tablo.png)
+  ![Tablo](images/tablo.png)
   
  
 </details>
@@ -73,7 +73,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   **Test Yazma Adımları:** Arrange(Hazırlık işlemleri), Act(Test edilmek istenen fonksiyonun çağrılma işlemleri), Assert(Act aşamasındaki sonuçların beklenen değerlerle karşılaştırma işlemleri). Bu adımlarla test yazılmış olur. Parametreli olup olmadığına göre [Fact] ve [Theory] özelliği eklenir.
   <br>
   
-   ![ornek](ornektest.png)
+   ![ornek](images/ornektest.png)
    
 </details>
 
@@ -127,14 +127,14 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   .NET testlerinde dış bağımlılıkları (veritabanı, API, servisler, mapper vb.) izole etmek için Moq kütüphanesi kullanılır. Bu sayede test edilen sınıf sadece kendi iç mantığına odaklanır ve dış dünyaya olan bağımlılıkları sahte (mock) nesnelerle değiştirilir.
   <br>
   
-  ![mock1](mock1.png)
+  ![mock1](images/mock1.png)
 
   Yukarıdaki yapı sayesinde: Gerçek bir veritabanı bağlantısı kurulmadan test yapılabilir.
   
   <br>
   Verify() metodu ile gerçekten çağrılıp çağrılmadığı test edilebilir:
   
-  ![mock2](mock2.png)
+  ![mock2](images/mock2.png)
 
   
 </details>
@@ -149,9 +149,9 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   Testlerdeki ana amaç; verilen bir girdiyle, beklenen çıktının elde edilip edilmediğini kontrol etmektir.
   <br>
 
-  ![assert1](assert1.png)
+  ![assert1](images/assert1.png)
   
-  ![mock2](mock2.png)
+  ![mock2](images/mock2.png)
 
   <br>
   Bu kontroller sayesinde hem dönüş değerleri hem de arka planda hangi fonksiyonların çağrıldığı net olarak doğrulanmış olur.
@@ -179,21 +179,21 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>3.1. Repository sınıfları için bir CRUD yapısı kurarak testler yazın. Bu süreçte Entity Framework Core kullanarak basit bir CRUD işlemi hazırlayın.</strong></summary>
   <br>
 
-  ![repo1](repo1.png)
+  ![repo1](images/repo1.png)
 
-  ![repo2](repo2.png)
+  ![repo2](images/repo2.png)
 
-  ![repotest1](repotest1.png)
+  ![repotest1](images/repotest1.png)
 
-  ![repotest2](repotest2.png)
+  ![repotest2](images/repotest2.png)
 
-  ![repotest3](repotest3.png)
+  ![repotest3](images/repotest3.png)
 
-  ![repotest4](repotest4.png)
+  ![repotest4](images/repotest4.png)
 
-  ![repotest5](repotest5.png)
+  ![repotest5](images/repotest5.png)
   
-  ![repotest6](repotest6.png)
+  ![repotest6](images/repotest6.png)
   
 </details>
 
@@ -203,7 +203,11 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>3.2. Mapper’ı ve veritabanını mocklama işlemlerini nasıl yapacağınızı gösterin.</strong></summary>
   <br>
   
+  ![mock3](images/mock3.png)
 
+  ![mock4](images/mock4.png)
+
+  [mock2](images/mock4.png)
 
   
 </details>
