@@ -5,6 +5,7 @@ using Kullanici.API.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -24,6 +25,8 @@ builder.Services.AddDbContext<KullaniciContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.AddSingleton<JwtTokenGenerator>();
@@ -45,6 +48,8 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddAuthorization();
 
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -92,6 +97,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction() )
 
 //app.UseHttpsRedirection();
 
+app.UseMiddleware<Kullanici.API.Middleware.ErrorHandlerMiddleware>();
 
 app.UseAuthorization();
 

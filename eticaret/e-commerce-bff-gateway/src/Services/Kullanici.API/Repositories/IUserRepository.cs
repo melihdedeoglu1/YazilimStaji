@@ -7,5 +7,6 @@ namespace Kullanici.API.Repositories
         Task<User> Register(User user);
         Task<bool> UserExists(string email);
         Task<User> GetUserByEmail(string email);
+        Task<User?> GetUserById(int id);
     }
 }

@@ -1,8 +1,18 @@
-
 version: '3.8'
 
 services:
+ 
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./src/Gateway/ApiGateway
+      dockerfile: Dockerfile
+    ports:
+      - "7000:8080"
+    depends_on:
+      - kullanici-servisi
   
+
   postgres-db:
     image: postgres:15-alpine
     container_name: postgres-db
@@ -11,14 +21,12 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=kullanici_db
     ports:
-      - "5433:5432" 
+      - "5433:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data 
+      - pgdata:/var/lib/postgresql/data
 
- 
   kullanici-servisi:
     container_name: kullanici-servisi
-    
     build:
       context: ./src/Services/Kullanici.API
       dockerfile: Dockerfile
@@ -26,9 +34,9 @@ services:
       - "5001:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=kullanici_db;Username=user;Password=password
     depends_on:
       - postgres-db
-
 
 volumes:
   pgdata:

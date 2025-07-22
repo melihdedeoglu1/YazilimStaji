@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using AutoMapper;
 
 namespace Kullanici.API.Services
 {
@@ -14,11 +15,13 @@ namespace Kullanici.API.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly JwtTokenGenerator _jwtTokenGenerator;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, JwtTokenGenerator jwtTokenGenerator) // Constructor'ı güncelle
+        public UserService(IUserRepository userRepository, JwtTokenGenerator jwtTokenGenerator, IMapper mapper)
         {
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _mapper = mapper;
         }
 
         public async Task<User> Register(UserForRegisterDto userForRegisterDto)
@@ -56,6 +59,24 @@ namespace Kullanici.API.Services
             // Token üretme işini yeni servise devret
             return _jwtTokenGenerator.GenerateToken(userFromRepo.Id,userFromRepo.Username,userFromRepo.Email);
         }
+
+        public async Task<UserForDetailDto?> GetUserById(int id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            if (user == null)
+            {
+                return null; // Kullanıcı bulunamazsa null dön
+            }
+
+            // AutoMapper'ı kullanarak User nesnesini UserForDetailDto'ya dönüştür
+            var userDto = _mapper.Map<UserForDetailDto>(user);
+            return userDto;
+        }
+
+
+
+
+
 
 
 

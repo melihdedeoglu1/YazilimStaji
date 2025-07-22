@@ -38,7 +38,10 @@ namespace Kullanici.API.Repositories
             return user;
         }
 
-
+        public async Task<User?> GetUserById(int id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
 
     }
 }

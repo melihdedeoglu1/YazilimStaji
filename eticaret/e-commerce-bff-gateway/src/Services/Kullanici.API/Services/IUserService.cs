@@ -7,5 +7,6 @@ namespace Kullanici.API.Services
     {
         Task<User> Register(UserForRegisterDto userForRegisterDto);
         Task<string> Login(UserForLoginDto userForLoginDto);
+        Task<UserForDetailDto?> GetUserById(int id);
     }
 }
