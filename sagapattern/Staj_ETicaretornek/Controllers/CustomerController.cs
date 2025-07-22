@@ -56,5 +56,9 @@ namespace Staj_ETicaretornek.Controllers
             }
         }
 
+
+
+
+
     }
 }

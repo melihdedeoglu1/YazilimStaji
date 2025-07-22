@@ -1,0 +1,34 @@
+
+version: '3.8'
+
+services:
+  
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=kullanici_db
+    ports:
+      - "5433:5432" 
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+
+ 
+  kullanici-servisi:
+    container_name: kullanici-servisi
+    
+    build:
+      context: ./src/Services/Kullanici.API
+      dockerfile: Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - postgres-db
+
+
+volumes:
+  pgdata:
