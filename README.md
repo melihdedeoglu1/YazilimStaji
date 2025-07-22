@@ -1,7 +1,7 @@
 # YazilimStaji
 Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığım çalışmalar.
 
-# Saga Pattern
+## Saga Pattern 
 
 <details>
   <summary><strong>1. Saga pattern mikroservis mimarisinde hangi sorunları çözmeye çalışır?</strong></summary>
@@ -60,7 +60,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 </details>
 
 
-# Xunit ve Moq
+## Xunit ve Moq
 
 <details>
   <summary><strong>1.	.NET platformunda unit test yapma sürecini açıklayın ve örnek olarak Xunit ve Moq kütüphanelerini kullanarak bir unit test yazın</strong></summary>
@@ -168,8 +168,11 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>2.4. Fact ve Theory: Farklı test senaryoları için Fact ve Theory kullanımını kod üzerinde uygulayalım.</strong></summary>
   <br>
   
+  ![factornek1](images/factornek1.png)
+  
+  ![theoryornek1](images/theoryornek1.png)
 
-
+  ![theoryornek2](images/theoryornek2.png)
   
 </details>
 
@@ -207,7 +210,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   ![mock4](images/mock4.png)
 
-  [mock2](images/mock4.png)
+  ![mock2](images/mock2.png)
 
   
 </details>
@@ -217,8 +220,139 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 <details>
   <summary><strong>3.3. Yerel bir veritabanı (MSSQL) kullanarak Visual Studio 2022'nin SQL Object Explorer'ı üzerinden bağlantı kurarak CRUD işlemlerini gerçekleştirin.</strong></summary>
   <br>
-  
 
+
+</details>
+
+
+
+## Application Monitoring - Event Sourcing - CQRS
+
+
+<details>
+  <summary><strong>1. Application Monitoring nedir? Elastic search nedir?</strong></summary>
+  <br>
+
+  ***Application Performance Monitoring(Uygulama Performans İzleme):*** Bir uygulamanın düzgün çalıştığından emin olmak için performansını, kullanılabilirliğini ve son kullanıcı deneyimini izleme sürecidir. APM, tatmin edici bir kullanıcı deneyimi sunmak ve müşteri hizmetleri sorunlarını veya şikayetlerini önlemek için hayati önem taşır. 
+
+  Ağ üzerindeki veri iletimlerinin gerçek zamanlı G/Ç paket taramasına dayanır. Verilerin analiz edilmesi ve ilişkilendirilmesi, performans sorunlarını tespit etmeyi ve teşhis etmeyi mümkün kılar.
+
+  ***Elastic Search:*** Büyük miktarda gerçek zamanlı veriyi toplayabilen, işleyebilen, depolayabilen, analiz edebilen ve görselleştirebilen açık kaynaklı bir arama ve analiz motorudur.
+
+
+  Elastic Stack, Logstash, Elasticsearch ve Kibana'dan oluşur. Logstash, tüm ham verileri toplayıp, indeksleyip Elasticsearch'te depolamadan önce işlemekten sorumludur. İndeksleme işleminden sonra, veriler üzerinde karmaşık sorgular çalıştırabilir ve verilerin karmaşık özetlerini almak için toplamaları kullanabiliriz.
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2. Event Sourcing Nedir?: Microservice mimarisinde Event Sourcing nedir, ne zaman kullanılır, avantajları ve zorlukları nelerdir?</strong></summary>
+  <br>
+
+  ***Event Sourcing(Olay Tabanlı Mimari):*** Sistemdeki tüm durum değişikliklerini(olayları) kaydetmeyi ve bu olaylardan sistemin durumunu oluşturmayı amaçlayan bir tasarım desenidir. 
+
+  ***Microservice mimarisinde Event Sourcing:*** Event Sourcing, sistemde gerçekleşen her işlemin (örneğin bir siparişin oluşturulması, ödemesinin yapılması, iptal edilmesi gibi) bir "event" (olay) olarak kaydedilmesidir. Bu event'ler değiştirilemez ve zamana göre sıralanır. Veritabanında sadece event'ler tutulur, sistemin son durumu bu event'lerin replay edilmesiyle hesaplanır.
+
+  ***Ne zaman kullanılır?:*** Karmaşık iş süreçlerinin ve domain mantığının bulunduğu durumlarda, sistem durumlarının geçmişini detaylı olarak izlemek gerektiğinde, Event-Driven(Olay Odaklı) sistemler kurmak istendiğinde Event Sourcing kullanılır.
+
+  ***Avantajları:*** Geçmişteki olayları takip edebilme, Replay(olaylar yeniden replay edilerek sistemin geçmişteki bir hali tekrar oluşturulabilir.), performans vb. .
+
+  ***Dezavantajları:*** Komplekslik, event yapıları değişebilir sürekli yenilenmeli, eventler değiştirilemez olduğundan kişisel verilerin silinmesi zor, kullanımı zor. 
+   
+</details>
+
+---
+
+<details>
+  <summary><strong>3. CQRS (Command Query Responsibility Segregation) Nedir?: CQRS ile Event Sourcing'in ilişkisi, kullanımı ve getirisi hakkında bilgi verin.
+</strong></summary>
+  <br>
+
+  ***CQRS Nedir?:*** Okuma ve yazma işlemlerinin farklı modellere ayrılmasını amaçlayan tasarım desenidir. Command yazma işlemleri için, Query ise okuma işlemleri için farklı veri modellerini kullanır. 
+
+  ***CQRS - Event Sourcing ilişkisi:*** CQRS ile Event Sourcing birbirinden bağımsız kavramlar olsalar da birlikte kullanıldıklarında güçlü bir mimaridir. 
+
+  ***CQRS - Event Sourcing kullanımı:*** Command bir işlem olduğunda event üretir. Event Handler bu eventi işler ve başka servisleri tetikler. Query okuma tarafına gidecek veriyi uygun bir modele günceller. (Örnek bir senaryo) DDD, Mikroservisler, Finansal uygulamalar vb. .
+
+  ***CQRS - Event Sourcing Getirisi:*** Mimari olarak sistemin esnekliğini, ölçeklenebilirliğini ve izlenebilirliğini ciddi şekilde artırır. Örnek: DDD ile uyum, iş sürecini ve senaryoyu izleme, test edilebilirlik, bağımsız geliştirme vb. .
+  
+</details>
+
+
+
+## API Gateway ve BFF (Backend For Frontend)
+
+
+<details>
+  <summary><strong>1. Microservice’lerde API Gateway kullanımı. Avantajları, hangi durumlarda kullanılması gerektiği ve farklı API Gateway araçları hakkında bilgi verin (Kong, Zuul, Ocelot, vs.).</strong></summary>
+  <br>
+
+  ***API Gateway:**** Gateway, Client tarafından servislerimize gelen istekleri karşılayan yapılar olarak nitelendirilir. API Gateway Client tarafından istekleri alıp servislere iletir. Bu sayede Client tarafından servisler için herhangi bir port bilgisinin bilinmesine gerek kalmaz. Client ve Gateway arasında sıkı bir bağımlılık vardır.
+
+  ***API Gateway Avantajları:*** Gelen isteklerin izlenmesi analiz edilmesi, API'leri güvenli bir şekilde yönetebilmek, servislere gelen istekleri mikroservisler arasında eşit şekilde dağıtarak yükü dengeleyebilir, sık kullanılan istekleri önbelleğe alarak performansı arttırabilir.
+
+  ***API Gateway Dezavantajları:*** Gateway servislerin merkezi konumunda olduğu için Gateway'de çıkan bir sorun tüm sistemi etkileyebilir. Sistem yönetimini karmaşıklaştırabilir ve iş yükünü arttırabilir. Ölçeklenebilirlik açısından zorluklar yaratabilir. Yüksek trafikli uygulamalarda API Gateway performansı sorun olabilir.
+
+  ***Hangi durumlarda kullanılması gerekir?:*** Mikroservis mimarisi kullanıldığında, farklı istemciler için tek noktadan yönetim istenildiğinde, istek yönlendirme gerektiğinde, protokol dönüşümü gerektiğinde, isteklerin tek noktadan loglanması ve izlenilmesi istenildiğinde, güvenlik ve kimlik doğrulama mekanizmalarının merkezi yönetimi için vb. .
+
+  ***Farklı API Gateway araçları:***
+
+  -**Kong:** Açık kaynaklıdır, Yüksek performanslıdır, NGINX tabanlıdır, Plugin mimarisi ile özelleştirilebilir, JWT,rate limiting gibi özelliklere sahiptir.
+
+  -**
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2. Frontend ve Backend arasındaki ilişkilerde BFF tasarımı. Kullanıcı arayüzüne özgü servislerin nasıl sunulacağını açıklayın.</strong></summary>
+  <br>
+
+  
+</details>
+
+
+
+## Domain-Driven Design (DDD)
+
+
+<details>
+  <summary><strong>1. Aggregate, Entity, Value Object, Bounded Context, Repository gibi temel DDD kavramlarını açıklayın.</strong></summary>
+  <br>
+
+  ***Aggregate:*** İlgili olayları bir araya getiren ve bir bütün olarak ele alınan bir yapıdır. Tek bir işlem birimi, bir varlık veya bir nesne olarak düşünülebilir. Örnek e-ticaret uygulamasında her bir sipariş, bir Aggregate'dir.
+
+  ***Entity:*** Kendine ait unique bir kimliği olan nesneler Entity olarak adlandırılır. DDD iş mantığını servislere değil, entitylere verir.
+
+  ***Value Object:*** Entity'nin tam tersi olarak kendine ait unique bir kimliği olmayan nesneler Value Object olarak adlandırılır.
+
+  ***Bounded Context:*** Domainde yer alan iş kuralları çerçevesinde mantıksal açıdan birbirleri ile en alakalı olanların bir araya gelerek gruplaştığı ve bu grubun sorumluluklarının net bir şekilde belirlenmiş olduğu yapılara Bounded Context denir.
+
+  ***Aggregate Root(AR):*** Yapı içerisindeki diğer Entity'lerin koordinasyonunun sağlayacak yönetici Entity seçilir ve bu seçim AR'u işaret eder. AR diğer AR'nin Entity'si ile iletişime geçemez. Sadece AR'ler birbiri ile iletişim kurmalıdır.
+  
+  ***Repository:*** Bir Aggregate içerisindeki bütün Entity ve Value Object'lerin taşıdığı bilgilerin veritabanına yazılması amacı ile kullanılan kavramdır. Her bir AR için Repository oluşturulur.
+
+  ***Layered Architecture:*** Domain Layer, Application Layer, Presentation Layer, Infrastructure Layer.
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>2. Domain-Driven Design’i, microservice mimarisiyle nasıl birleştirebileceğinizi anlatın. Bir domain model oluşturun ve bu modeli servisler arasında nasıl paylaşacağınızı açıklayın.</strong></summary>
+  <br>
+
+  
+</details>
+
+---
+
+<details>
+  <summary><strong>3.  DDD ile CQRS ve Event Sourcing’i nasıl entegre edebileceğinizi açıklayın.</strong></summary>
+  <br>
 
   
 </details>
