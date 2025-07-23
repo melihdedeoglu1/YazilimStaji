@@ -1,4 +1,5 @@
 ﻿using Kullanici.API.Data;
+using Kullanici.API.Helpers;
 using Kullanici.API.Repositories;
 using Kullanici.API.Services;
 using Kullanici.API.Settings;
@@ -49,7 +50,11 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddAuthorization();
 
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile(new AutoMapperProfiles());
+});
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -58,7 +63,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Customer API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Kullanici API", Version = "v1" });
 
     var securitySchema = new OpenApiSecurityScheme
     {

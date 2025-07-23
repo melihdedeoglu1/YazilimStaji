@@ -10,7 +10,67 @@
         }
       ],
       "UpstreamPathTemplate": "/user-api/{everything}"
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/Product",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "urun-servisi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/product-api/Product",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "urun-servisi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/product-api/Product/{id}",
+      "UpstreamHttpMethod": [ "GET","PUT","DELETE"]
+    },
+
+
+
+
+
+
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "web-bff",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/bff/{everything}"
     }
+   
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:7000"

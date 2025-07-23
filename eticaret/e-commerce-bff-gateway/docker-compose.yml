@@ -11,7 +11,18 @@ services:
       - "7000:8080"
     depends_on:
       - kullanici-servisi
+      - urun-servisi
   
+  web-bff:
+    container_name: web-bff
+    build:
+      context: ./src/BFF/WebBff.API
+      dockerfile: Dockerfile
+    ports:
+      - "5003:8080" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
 
   postgres-db:
     image: postgres:15-alpine
@@ -24,7 +35,7 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+      
   kullanici-servisi:
     container_name: kullanici-servisi
     build:
@@ -35,6 +46,19 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=kullanici_db;Username=user;Password=password
+    depends_on:
+      - postgres-db
+
+  urun-servisi:
+    container_name: urun-servisi
+    build:
+      context: ./src/Services/Urun.API
+      dockerfile: Dockerfile
+    ports:
+      - "5002:8080" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=urun_db;Username=user;Password=password 
     depends_on:
       - postgres-db
 

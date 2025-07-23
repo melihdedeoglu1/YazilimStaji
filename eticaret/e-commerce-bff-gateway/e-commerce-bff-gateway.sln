@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Çözüm Öğeleri", "Çöz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "src\Gateway\ApiGateway\ApiGateway.csproj", "{437E8A7E-09BA-43F1-BAA5-4A619C761303}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urun.API", "src\Services\Urun.API\Urun.API.csproj", "{B04AA6A2-A066-4630-BCF3-80C803BBFC61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebBff.API", "src\BFF\WebBff.API\WebBff.API.csproj", "{15058D4A-35FC-4BC8-990A-D679CF6EF422}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{437E8A7E-09BA-43F1-BAA5-4A619C761303}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{437E8A7E-09BA-43F1-BAA5-4A619C761303}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{437E8A7E-09BA-43F1-BAA5-4A619C761303}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04AA6A2-A066-4630-BCF3-80C803BBFC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04AA6A2-A066-4630-BCF3-80C803BBFC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04AA6A2-A066-4630-BCF3-80C803BBFC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04AA6A2-A066-4630-BCF3-80C803BBFC61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15058D4A-35FC-4BC8-990A-D679CF6EF422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15058D4A-35FC-4BC8-990A-D679CF6EF422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15058D4A-35FC-4BC8-990A-D679CF6EF422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15058D4A-35FC-4BC8-990A-D679CF6EF422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
