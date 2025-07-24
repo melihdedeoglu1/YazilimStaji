@@ -1,0 +1,6 @@
+@Siparis.API_HostAddress = http://localhost:5046
+
+GET {{Siparis.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

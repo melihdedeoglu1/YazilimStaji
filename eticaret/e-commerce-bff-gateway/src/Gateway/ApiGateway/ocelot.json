@@ -55,6 +55,26 @@
 
 
 
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "siparis-servisi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/order-api/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+
+
+
+
+
 
 
 

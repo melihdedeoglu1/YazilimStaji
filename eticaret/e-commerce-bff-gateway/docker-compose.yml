@@ -12,6 +12,9 @@ services:
     depends_on:
       - kullanici-servisi
       - urun-servisi
+      - siparis-servisi 
+    networks:          
+      - ecom_network
   
   web-bff:
     container_name: web-bff
@@ -22,7 +25,9 @@ services:
       - "5003:8080" 
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-
+    networks:         
+      - ecom_network
+    
 
   postgres-db:
     image: postgres:15-alpine
@@ -35,6 +40,23 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:          
+      - ecom_network
+
+  rabbitmq:
+    image: rabbitmq:3.11-management 
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    
+      - "15672:15672" 
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest 
+    networks:
+      - ecom_network 
+
       
   kullanici-servisi:
     container_name: kullanici-servisi
@@ -48,6 +70,8 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=kullanici_db;Username=user;Password=password
     depends_on:
       - postgres-db
+    networks:          
+      - ecom_network
 
   urun-servisi:
     container_name: urun-servisi
@@ -61,6 +85,49 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=urun_db;Username=user;Password=password 
     depends_on:
       - postgres-db
+    networks:          
+      - ecom_network
+
+  siparis-servisi:
+    container_name: siparis-servisi
+    build:
+      context: .
+      dockerfile: src/Services/Siparis.API/Dockerfile
+    ports:
+      - "5004:8080" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=siparis_db;Username=user;Password=password
+      - RabbitMQ__Host=rabbitmq 
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      - postgres-db 
+      - rabbitmq
+    networks:          
+      - ecom_network
+
+
+  notifikasyon-servisi:
+    container_name: notifikasyon-servisi
+    build:
+      context: .
+      dockerfile: src/Workers/Notifikasyon.Worker/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      - rabbitmq
+    networks:
+      - ecom_network
+
 
 volumes:
   pgdata:
+  rabbitmq_data:  
+  
+networks:
+  ecom_network:
+    driver: bridge

@@ -1,19 +1,38 @@
+ï»¿using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adým 1: ocelot.json dosyasýný projenin yapýlandýrmasýna ekle.
-// Bu sayede Ocelot, kurallarýný bu dosyadan okuyabilir.
+
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
-// Adým 2: Ocelot servislerini Dependency Injection'a ekle.
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("super-secret-simplemart-key-1234567890")) 
+        };
+    });
+
+
 builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-// Adým 3: Ocelot'u uygulamanýn middleware'i (ara yazýlýmý) olarak kullan.
-// Bu, gelen her isteðin Ocelot tarafýndan iþlenmesini saðlar.
+app.UseAuthentication();
+app.UseAuthorization();
+
 await app.UseOcelot();
 
 app.Run();
