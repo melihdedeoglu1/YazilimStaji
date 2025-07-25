@@ -17,14 +17,15 @@ namespace Kullanici.API.Services
             _jwtSettings = jwtSettings.Value;
         }
 
-        public string GenerateToken(int userId, string userName, string email)
+        public string GenerateToken(int userId, string userName, string email, string role)
         {
             var claims = new[]
             {
         new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-        new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // standart id
-        new Claim(ClaimTypes.Name, userName),                     // standart isim
-        new Claim(ClaimTypes.Email, email)                        // standart e-posta
+        new Claim(ClaimTypes.NameIdentifier, userId.ToString()), 
+        new Claim(ClaimTypes.Name, userName),                     
+        new Claim(ClaimTypes.Email, email) ,
+        new Claim(ClaimTypes.Role, role)
     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));

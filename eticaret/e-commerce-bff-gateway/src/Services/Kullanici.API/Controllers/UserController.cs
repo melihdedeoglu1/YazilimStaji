@@ -36,7 +36,7 @@ namespace Kullanici.API.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> Me()
         {
-            // Token'dan kullanıcı ID'sini alıyoruz (bu kısım zaten vardı ve doğruydu)
+            
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString))
             {
@@ -45,12 +45,12 @@ namespace Kullanici.API.Controllers
 
             var userId = int.Parse(userIdString);
 
-            // Yeni servis metodumuzu çağırıyoruz
+            
             var userDto = await _userService.GetUserById(userId);
 
             if (userDto == null)
             {
-                return NotFound($"User with ID {userId} not found."); // Veritabanında kullanıcı bulunamazsa
+                return NotFound($"User with ID {userId} not found."); 
             }
 
             return Ok(userDto);

@@ -12,7 +12,7 @@ using Siparis.API.Data;
 namespace Siparis.API.Migrations
 {
     [DbContext(typeof(SiparisContext))]
-    [Migration("20250724071738_start")]
+    [Migration("20250725122651_start")]
     partial class start
     {
         /// <inheritdoc />
@@ -35,6 +35,10 @@ namespace Siparis.API.Migrations
 
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("double precision");

@@ -13,14 +13,14 @@ COPY ["src/Services/Urun.API/Urun.API.csproj", "src/Services/Urun.API/"]
 COPY ["src/Workers/Notifikasyon.Worker/Notifikasyon.Worker.csproj", "src/Workers/Notifikasyon.Worker/"]
 COPY ["src/Workers/Stok.Worker/Stok.Worker.csproj", "src/Workers/Stok.Worker/"]
 
-RUN dotnet restore "e-commerce-bff-gateway.sln"
 
+RUN dotnet restore "e-commerce-bff-gateway.sln"
 
 COPY . .
 
 
-WORKDIR "/src/src/Workers/Notifikasyon.Worker"
-RUN dotnet publish "Notifikasyon.Worker.csproj" -c Release -o /app/publish
+WORKDIR "/src/src/Workers/Stok.Worker"
+RUN dotnet publish "Stok.Worker.csproj" -c Release -o /app/publish
 
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0
@@ -29,4 +29,4 @@ COPY --from=build /app/publish .
 
 
 
-ENTRYPOINT ["dotnet", "Notifikasyon.Worker.dll"]
+ENTRYPOINT ["dotnet", "Stok.Worker.dll"]

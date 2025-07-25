@@ -6,5 +6,7 @@ namespace Siparis.API.Repositories
     {
         Task<Order> CreateAsync(Order order);
 
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
+
     }
 }

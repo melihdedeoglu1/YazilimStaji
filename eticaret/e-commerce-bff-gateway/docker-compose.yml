@@ -123,6 +123,21 @@ services:
     networks:
       - ecom_network
 
+  stok-servisi:
+    container_name: stok-servisi
+    build:
+      context: .
+      dockerfile: src/Workers/Stok.Worker/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      - rabbitmq
+    networks:
+      - ecom_network
+
 
 volumes:
   pgdata:

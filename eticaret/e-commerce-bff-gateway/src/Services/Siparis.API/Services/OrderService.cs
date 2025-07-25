@@ -20,6 +20,12 @@ namespace Siparis.API.Services
             _publishEndpoint = publishEndpoint;
         }
 
+        public async Task<IEnumerable<Order>> GetUserOrdersAsync(int userId)
+        {
+            
+            return await _orderRepository.GetOrdersByUserIdAsync(userId);
+        }
+
         public async Task<Order> CreateAsync(int userId, string userEmail, OrderForCreateDto orderDto)
         {
           

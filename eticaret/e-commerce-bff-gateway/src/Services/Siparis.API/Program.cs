@@ -1,4 +1,5 @@
 using MassTransit;
+using Siparis.API.Consumers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -44,17 +45,6 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 
 
-builder.Services.AddMassTransit(configurator =>
-{
-    configurator.UsingRabbitMq((context, config) =>
-    {
-        config.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
-        {
-            h.Username(builder.Configuration["RabbitMQ:Username"]);
-            h.Password(builder.Configuration["RabbitMQ:Password"]);
-        });
-    });
-});
 
 
 
@@ -67,6 +57,34 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+
+
+builder.Services.AddMassTransit(configurator =>
+{
+
+    configurator.AddConsumer<StokGuncellemeBasarisizConsumer>();
+
+    configurator.UsingRabbitMq((context, config) =>
+    {
+        
+        var rabbitMqConfig = builder.Configuration.GetSection("RabbitMQ");
+        config.Host(rabbitMqConfig["Host"], "/", h =>
+        {
+            h.Username(rabbitMqConfig["Username"]);
+            h.Password(rabbitMqConfig["Password"]);
+        });
+
+
+        config.ReceiveEndpoint("stok-guncelleme-basarisiz-siparis-kuyrugu", e =>
+        {
+            e.ConfigureConsumer<StokGuncellemeBasarisizConsumer>(context);
+        });
+    });
+});
+
+
 
 var app = builder.Build();
 

@@ -37,9 +37,10 @@ namespace Kullanici.API.Services
                 Email = userForRegisterDto.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                CreatedAt = DateTime.UtcNow 
+                CreatedAt = DateTime.UtcNow,
+                Role = "User"
             };
-
+            
             var createdUser = await _userRepository.Register(userToCreate);
 
             return createdUser;
@@ -56,8 +57,8 @@ namespace Kullanici.API.Services
             if (!VerifyPasswordHash(userForLoginDto.Password, userFromRepo.PasswordHash, userFromRepo.PasswordSalt))
                 throw new Exception("Wrong password.");
 
-            // Token üretme işini yeni servise devret
-            return _jwtTokenGenerator.GenerateToken(userFromRepo.Id,userFromRepo.Username,userFromRepo.Email);
+            
+            return _jwtTokenGenerator.GenerateToken(userFromRepo.Id,userFromRepo.Username,userFromRepo.Email,userFromRepo.Role);
         }
 
         public async Task<UserForDetailDto?> GetUserById(int id)
@@ -65,10 +66,10 @@ namespace Kullanici.API.Services
             var user = await _userRepository.GetUserById(id);
             if (user == null)
             {
-                return null; // Kullanıcı bulunamazsa null dön
+                return null; 
             }
 
-            // AutoMapper'ı kullanarak User nesnesini UserForDetailDto'ya dönüştür
+           
             var userDto = _mapper.Map<UserForDetailDto>(user);
             return userDto;
         }

@@ -1,4 +1,5 @@
-﻿using Siparis.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Siparis.API.Data;
 using Siparis.API.Models;
 
 namespace Siparis.API.Repositories
@@ -19,6 +20,15 @@ namespace Siparis.API.Repositories
             await _context.SaveChangesAsync();
 
             return order;
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId)
+        {
+            return await _context.Orders
+                                 .Include(o => o.OrderItems)
+                                 .Where(o => o.UserId == userId)
+                                 .OrderByDescending(o => o.OrderDate)
+                                 .ToListAsync();
         }
     }
 }

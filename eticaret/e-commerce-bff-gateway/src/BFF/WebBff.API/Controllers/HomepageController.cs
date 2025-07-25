@@ -20,11 +20,9 @@ namespace WebBff.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("ApiGatewayClient");
 
-            client.BaseAddress = new Uri("http://api-gateway:8080");
-
-
+            
             var homepageData = new HomepageDto
             {
                 

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Siparis.API.DTOs;
+using Siparis.API.Models;
 using Siparis.API.Services;
 using System.Security.Claims;
 
@@ -20,6 +22,32 @@ namespace Siparis.API.Controllers
             _orderService = orderService;
             _logger = logger;
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult> GetMyOrders() 
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Kullanıcı kimliği bulunamadı.");
+            }
+            var userId = int.Parse(userIdClaim.Value);
+
+            
+            var orders = await _orderService.GetUserOrdersAsync(userId);
+
+            if (orders == null || !orders.Any())
+            {
+                return Ok(new List<Order>());
+            }
+
+            return Ok(orders);
+        }
+
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderForCreateDto orderDto)
@@ -43,6 +71,8 @@ namespace Siparis.API.Controllers
             
             return Ok(createdOrder);
         }
+
+
 
 
     }

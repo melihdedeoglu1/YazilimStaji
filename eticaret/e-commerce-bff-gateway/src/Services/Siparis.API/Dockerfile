@@ -11,7 +11,7 @@ COPY ["src/Services/Kullanici.API/Kullanici.API.csproj", "src/Services/Kullanici
 COPY ["src/Services/Siparis.API/Siparis.API.csproj", "src/Services/Siparis.API/"]
 COPY ["src/Services/Urun.API/Urun.API.csproj", "src/Services/Urun.API/"]
 COPY ["src/Workers/Notifikasyon.Worker/Notifikasyon.Worker.csproj", "src/Workers/Notifikasyon.Worker/"]
-
+COPY ["src/Workers/Stok.Worker/Stok.Worker.csproj", "src/Workers/Stok.Worker/"]
 
 RUN dotnet restore "e-commerce-bff-gateway.sln"
 
