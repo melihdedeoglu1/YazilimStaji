@@ -28,7 +28,7 @@ namespace Notifikasyon.Worker.Consumers
 
             
             _logger.LogInformation(
-                "--> {SiparisId} ID'li sipariş için e-posta gönderim işlemi simüle edildi.",
+                "--> {SiparisId} ID'li sipariş için e-posta ya da herhangi bir şey simüle etmek istediğimde burayı kullanacağım.",
                 eventMessage.SiparisId);
 
             return Task.CompletedTask;
