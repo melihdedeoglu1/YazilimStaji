@@ -288,7 +288,7 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
   <summary><strong>1. Microservice’lerde API Gateway kullanımı. Avantajları, hangi durumlarda kullanılması gerektiği ve farklı API Gateway araçları hakkında bilgi verin (Kong, Zuul, Ocelot, vs.).</strong></summary>
   <br>
 
-  ***API Gateway:**** Gateway, Client tarafından servislerimize gelen istekleri karşılayan yapılar olarak nitelendirilir. API Gateway Client tarafından istekleri alıp servislere iletir. Bu sayede Client tarafından servisler için herhangi bir port bilgisinin bilinmesine gerek kalmaz. Client ve Gateway arasında sıkı bir bağımlılık vardır.
+  ***API Gateway:*** Gateway, Client tarafından servislerimize gelen istekleri karşılayan yapılar olarak nitelendirilir. API Gateway Client tarafından istekleri alıp servislere iletir. Bu sayede Client tarafından servisler için herhangi bir port bilgisinin bilinmesine gerek kalmaz. Client ve Gateway arasında sıkı bir bağımlılık vardır.
 
   ***API Gateway Avantajları:*** Gelen isteklerin izlenmesi analiz edilmesi, API'leri güvenli bir şekilde yönetebilmek, servislere gelen istekleri mikroservisler arasında eşit şekilde dağıtarak yükü dengeleyebilir, sık kullanılan istekleri önbelleğe alarak performansı arttırabilir.
 
@@ -298,10 +298,20 @@ Yazılım yaz stajımda öğrendiklerim ve kendimi geliştirmek için yaptığı
 
   ***Farklı API Gateway araçları:***
 
-  -**Kong:** Açık kaynaklıdır, Yüksek performanslıdır, NGINX tabanlıdır, Plugin mimarisi ile özelleştirilebilir, JWT,rate limiting gibi özelliklere sahiptir.
+  -**Kong:** Açık kaynaklıdır, Yüksek performanslıdır, NGINX tabanlıdır, Plugin mimarisi ile özelleştirilebilir, JWT,rate limiting gibi özelliklere sahiptir. Uygulamadan özel sunucuya istek yönlendirmesini kontrol etmenizi, ayarlamanızı ve yönlendirmenizi sağlayan basit, hızlı ve hafif bir çözümdür.
 
-  -**
+  -**Zuul:** Netflix'in Java tabanlı API ağ geçididir, ek olarak Zuul her istek için bir dizi filtre işletir, bu filtreler çalışma anında belirlenir ve "İstek Bağlamı" aracılığıyla bilgi iletir. 
+
+  -**Ocelot:** .NET Core platformunda kullanılır. Ocelot, API Gateway olarak çalışırken esnek ve modüler bir yapı sunarak farklı servisler arasındaki iletişimi kolaylaştırır. Çalışma prensibi, gelen istekleri belirli yönlendirmelere göre işleyerek, önceden tanımlanmış yönlendirmeler doğrultusunda ilgili servislere iletmek üzerine kuruludur. Bu kütüphane, bir dizi özelliği içinde barındırarak istemcilerden gelen istekleri alır, yönlendirir, filtreler ve servisler arasında iletişimi sağlar. ocelot.json dosyasına yazılan yönlendirme kurallarına göre ilgili servislere iletir.
+
+  -**Trafeik:** Modern, bulut tabanlı bir HTTP ters proxy ve yük dengeleyicidir. Mikro hizmetler için güçlü destek sağlar ve Docker, Kubernetes, Rancher ve Consul ile entegre olur. Traefik, minimum yapılandırma gerektirir ve rotaları arka uç hizmetlerine enjekte etmek için otomatik hizmet keşfini kullanır.
+
+  -**Tyk:** 2014'ten beri Tyk Technologie tarafından Go'da geliştirilen bir Açık Kaynak API Ağ Geçidi'dir. Gravitee'nin çalışması için üç işleme ihtiyaç vardır, 1.si ağ geçidi 2.si gösterge paneli 3.sü Redis'ten veri çeken ve MongoDB'ye enjekte eden pompadır. Kurulumu Kong'dan daha uzun sürüyor çünkü bir Redis ve bir MongoDB kurmanız gerekiyor. 
+
+  -**HAProxy:** Lua ve C dillerinde yazılmış ücretsiz ve açık kaynaklı bir çözümdür. HAProxy, bir API Ağ Geçidi yerine bir yük dengeleyici olarak tasarlanmış olmasıyla önceki çözümlerden farklıdır , ancak API Ağ Geçidi olarak da kullanılabilir.  Mimarisi basittir, başlatılacak tek bir işlem vardır ve bu işlem başlatıldığında bir yapılandırma dosyasını okur.
   
+  ...
+   
 </details>
 
 ---
