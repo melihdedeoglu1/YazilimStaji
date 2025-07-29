@@ -24,7 +24,7 @@
           "Port": 8080
         }
       ]
-    }, 
+    },
     {
       "UpstreamPathTemplate": "/user-api/me",
       "UpstreamHttpMethod": [ "Get" ],
@@ -103,7 +103,18 @@
 
 
 
-
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "iade-servisi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/iade-api/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
 
 
 

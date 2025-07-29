@@ -1,6 +1,7 @@
 using Polly;
 using Polly.Extensions.Http;
 using System.Net.Http;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,21 @@ builder.Services.AddHttpClient("ApiGatewayClient", client =>
     client.BaseAddress = new Uri("http://api-gateway:8080");
 })
 .AddPolicyHandler(GetRetryPolicy());
+
+
+builder.Services.AddMassTransit(configurator =>
+{
+    // Bu servis sadece event yayýnlayacaðý için Consumer tanýmlamaya gerek yok.
+    configurator.UsingRabbitMq((context, cfg) =>
+    {
+        // docker-compose.yml'den RabbitMQ host bilgisini al
+        cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+    });
+});
 
 
 builder.Services.AddControllers();

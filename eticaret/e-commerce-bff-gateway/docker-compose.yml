@@ -1,33 +1,36 @@
 version: '3.8'
 
 services:
- 
   api-gateway:
     container_name: api-gateway
     build:
-      context: ./src/Gateway/ApiGateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/Gateway/ApiGateway/Dockerfile
     ports:
       - "7000:8080"
+    environment:
+      - Otlp__Endpoint=http://jaeger:4317
     depends_on:
       - kullanici-servisi
       - urun-servisi
-      - siparis-servisi 
-    networks:          
+      - siparis-servisi
+      - iade-servisi
+      - web-bff
+      - jaeger 
+    networks:
       - ecom_network
-  
+
   web-bff:
     container_name: web-bff
     build:
-      context: ./src/BFF/WebBff.API
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/BFF/WebBff.API/Dockerfile
     ports:
-      - "5003:8080" 
+      - "5003:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    networks:         
+    networks:
       - ecom_network
-    
 
   postgres-db:
     image: postgres:15-alpine
@@ -35,34 +38,43 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=kullanici_db
+      - POSTGRES_DB=kullanici_db 
     ports:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:          
+    networks:
       - ecom_network
 
   rabbitmq:
-    image: rabbitmq:3.11-management 
+    image: rabbitmq:3.11-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"    
-      - "15672:15672" 
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
     environment:
       - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest 
+      - RABBITMQ_DEFAULT_PASS=guest
     networks:
-      - ecom_network 
+      - ecom_network
 
-      
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+      - "4317:4317" 
+    networks:
+      - ecom_network
+
   kullanici-servisi:
     container_name: kullanici-servisi
     build:
-      context: ./src/Services/Kullanici.API
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/Services/Kullanici.API/Dockerfile
     ports:
       - "5001:8080"
     environment:
@@ -70,22 +82,22 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=kullanici_db;Username=user;Password=password
     depends_on:
       - postgres-db
-    networks:          
+    networks:
       - ecom_network
 
   urun-servisi:
     container_name: urun-servisi
     build:
-      context: ./src/Services/Urun.API
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/Services/Urun.API/Dockerfile
     ports:
-      - "5002:8080" 
+      - "5002:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=urun_db;Username=user;Password=password 
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=urun_db;Username=user;Password=password
     depends_on:
       - postgres-db
-    networks:          
+    networks:
       - ecom_network
 
   siparis-servisi:
@@ -94,19 +106,37 @@ services:
       context: .
       dockerfile: src/Services/Siparis.API/Dockerfile
     ports:
-      - "5004:8080" 
+      - "5004:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=siparis_db;Username=user;Password=password
-      - RabbitMQ__Host=rabbitmq 
+      - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
     depends_on:
-      - postgres-db 
+      - postgres-db
       - rabbitmq
-    networks:          
+    networks:
       - ecom_network
 
+  iade-servisi:
+    container_name: iade-servisi
+    build:
+      context: .
+      dockerfile: src/Services/Iade.API/Dockerfile
+    ports:
+      - "5005:8080" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=iade_db;Username=user;Password=password
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    depends_on:
+      - postgres-db
+      - rabbitmq
+    networks:
+      - ecom_network
 
   notifikasyon-servisi:
     container_name: notifikasyon-servisi
@@ -114,7 +144,7 @@ services:
       context: .
       dockerfile: src/Workers/Notifikasyon.Worker/Dockerfile
     environment:
-      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development 
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
@@ -129,7 +159,7 @@ services:
       context: .
       dockerfile: src/Workers/Stok.Worker/Dockerfile
     environment:
-      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development 
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
@@ -138,11 +168,10 @@ services:
     networks:
       - ecom_network
 
-
 volumes:
   pgdata:
-  rabbitmq_data:  
-  
+  rabbitmq_data:
+
 networks:
   ecom_network:
     driver: bridge

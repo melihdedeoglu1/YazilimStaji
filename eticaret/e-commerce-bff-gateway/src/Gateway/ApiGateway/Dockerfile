@@ -1,33 +1,30 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY ["ApiGateway.csproj", "."]
 
-RUN dotnet restore "./ApiGateway.csproj"
+COPY ["e-commerce-bff-gateway.sln", "./"]
+COPY ["src/BFF/WebBff.API/WebBff.API.csproj", "src/BFF/WebBff.API/"]
+COPY ["src/Common/Shared.Contracts/Shared.Contracts.csproj", "src/Common/Shared.Contracts/"]
+COPY ["src/Gateway/ApiGateway/ApiGateway.csproj", "src/Gateway/ApiGateway/"]
+COPY ["src/Services/Kullanici.API/Kullanici.API.csproj", "src/Services/Kullanici.API/"]
+COPY ["src/Services/Siparis.API/Siparis.API.csproj", "src/Services/Siparis.API/"]
+COPY ["src/Services/Urun.API/Urun.API.csproj", "src/Services/Urun.API/"]
+COPY ["src/Services/Iade.API/Iade.API.csproj", "src/Services/Iade.API/"]
+COPY ["src/Workers/Notifikasyon.Worker/Notifikasyon.Worker.csproj", "src/Workers/Notifikasyon.Worker/"]
+COPY ["src/Workers/Stok.Worker/Stok.Worker.csproj", "src/Workers/Stok.Worker/"]
+
+
+RUN dotnet restore "e-commerce-bff-gateway.sln"
+
 
 COPY . .
 
-WORKDIR "/src/."
-
-RUN dotnet build "ApiGateway.csproj" -c Release -o /app/build
-
-
-
-
-
-FROM build AS publish
-
-RUN dotnet publish "ApiGateway.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-
-
+WORKDIR "/src/src/Gateway/ApiGateway"
+RUN dotnet publish "ApiGateway.csproj" -c Release -o /app/publish 
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
-
 WORKDIR /app
-
-COPY --from=publish /app/publish .
-
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "ApiGateway.dll"]

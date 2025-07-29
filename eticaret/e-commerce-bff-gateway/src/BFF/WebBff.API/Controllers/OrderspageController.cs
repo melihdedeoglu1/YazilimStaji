@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using WebBff.API.DTOs;
+using Shared.Contracts;
 
 namespace WebBff.API.Controllers
 {
@@ -11,11 +13,13 @@ namespace WebBff.API.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
 
         private readonly ILogger<OrderspageController> _logger;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderspageController(IHttpClientFactory httpClientFactory, ILogger<OrderspageController> logger)
+        public OrderspageController(IHttpClientFactory httpClientFactory, ILogger<OrderspageController> logger, IPublishEndpoint publishEndpoint)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _publishEndpoint = publishEndpoint;
         }
 
 
@@ -91,6 +95,32 @@ namespace WebBff.API.Controllers
         }
 
 
+
+        [HttpPost("iade-talebi")]
+        public async Task<IActionResult> IadeTalebiOlustur([FromBody] IadeTalebiRequestDto request)
+        {
+            
+            var iadeTalebiEvent = new SiparisIadeTalebiEvent
+            {                
+                OrderId = request.OrderId,
+                UserId = request.UserId, 
+                RefundPrice = request.RefundPrice,
+                Products = request.Products.Select(p => new IptalUrun
+                {
+                    ProductId = p.ProductId,
+                    ProductName = p.ProductName,
+                    ProductQuantity = p.ProductQuantity
+                }).ToList()
+            };
+
+            
+            await _publishEndpoint.Publish(iadeTalebiEvent);
+
+            _logger.LogInformation("{OrderId} numaralı sipariş için iade talebi alındı ve yayınlandı.", request.OrderId);
+
+            
+            return Ok(new { Message = "İade talebiniz başarıyla alınmıştır. Durumunu sipariş detay sayfasından takip edebilirsiniz." });
+        }
 
     }
 }

@@ -8,7 +8,8 @@ using Urun.API.DTOs;
 using Urun.API.Repositories;
 using Urun.API.Services;
 using Urun.API.Validators;
-
+using MassTransit;
+using Urun.API.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,30 @@ builder.Host.UseSerilog((context, configuration) =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<UrunContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddMassTransit(configurator =>
+{
+
+    configurator.AddConsumer<IadeOnaylandiConsumer>();
+
+    configurator.UsingRabbitMq((context, cfg) =>
+    {
+
+        cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+
+
+        cfg.ReceiveEndpoint("iade-talebi-kuyrugu-urun", e =>
+        {
+            e.ConfigureConsumer<IadeOnaylandiConsumer>(context);
+        });
+    });
+});
+
+
 
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();

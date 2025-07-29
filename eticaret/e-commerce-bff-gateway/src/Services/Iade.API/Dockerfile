@@ -4,6 +4,8 @@ WORKDIR /src
 
 
 COPY ["e-commerce-bff-gateway.sln", "./"]
+
+
 COPY ["src/BFF/WebBff.API/WebBff.API.csproj", "src/BFF/WebBff.API/"]
 COPY ["src/Common/Shared.Contracts/Shared.Contracts.csproj", "src/Common/Shared.Contracts/"]
 COPY ["src/Gateway/ApiGateway/ApiGateway.csproj", "src/Gateway/ApiGateway/"]
@@ -22,12 +24,11 @@ RUN dotnet restore "e-commerce-bff-gateway.sln"
 COPY . .
 
 
-WORKDIR "/src/src/BFF/WebBff.API"
-RUN dotnet publish "WebBff.API.csproj" -c Release -o /app/publish 
+WORKDIR "/src/src/Services/Iade.API"
+RUN dotnet publish "Iade.API.csproj" -c Release -o /app/publish 
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
-
-ENTRYPOINT ["dotnet", "WebBff.API.dll"]
+ENTRYPOINT ["dotnet", "Iade.API.dll"]

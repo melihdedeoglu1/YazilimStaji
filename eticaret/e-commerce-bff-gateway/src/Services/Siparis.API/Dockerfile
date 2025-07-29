@@ -10,11 +10,13 @@ COPY ["src/Gateway/ApiGateway/ApiGateway.csproj", "src/Gateway/ApiGateway/"]
 COPY ["src/Services/Kullanici.API/Kullanici.API.csproj", "src/Services/Kullanici.API/"]
 COPY ["src/Services/Siparis.API/Siparis.API.csproj", "src/Services/Siparis.API/"]
 COPY ["src/Services/Urun.API/Urun.API.csproj", "src/Services/Urun.API/"]
+COPY ["src/Services/Iade.API/Iade.API.csproj", "src/Services/Iade.API/"]
 COPY ["src/Workers/Notifikasyon.Worker/Notifikasyon.Worker.csproj", "src/Workers/Notifikasyon.Worker/"]
 COPY ["src/Workers/Stok.Worker/Stok.Worker.csproj", "src/Workers/Stok.Worker/"]
 
-RUN dotnet restore "e-commerce-bff-gateway.sln"
 
+
+RUN dotnet restore "e-commerce-bff-gateway.sln"
 
 COPY . .
 

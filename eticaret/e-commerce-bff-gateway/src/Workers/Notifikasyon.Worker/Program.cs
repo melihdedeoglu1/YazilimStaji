@@ -19,8 +19,8 @@ public class Program
                         var rabbitMqConfig = hostContext.Configuration.GetSection("RabbitMQ");
                         config.Host(rabbitMqConfig["Host"], "/", h =>
                         {
-                            h.Username(rabbitMqConfig["Username"]);
-                            h.Password(rabbitMqConfig["Password"]);
+                            h.Username(rabbitMqConfig["Username"] ?? "guest");
+                            h.Password(rabbitMqConfig["Password"] ?? "guest");
                         });
 
 

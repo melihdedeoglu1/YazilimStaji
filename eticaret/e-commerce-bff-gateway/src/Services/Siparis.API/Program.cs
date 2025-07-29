@@ -63,23 +63,29 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(configurator =>
 {
-
+   
     configurator.AddConsumer<StokGuncellemeBasarisizConsumer>();
+    configurator.AddConsumer<IadeOnaylandiConsumer>();
 
-    configurator.UsingRabbitMq((context, config) =>
+    
+    configurator.UsingRabbitMq((context, cfg) =>
     {
-        
         var rabbitMqConfig = builder.Configuration.GetSection("RabbitMQ");
-        config.Host(rabbitMqConfig["Host"], "/", h =>
+        cfg.Host(rabbitMqConfig["Host"], "/", h =>
         {
-            h.Username(rabbitMqConfig["Username"]);
-            h.Password(rabbitMqConfig["Password"]);
+            h.Username(rabbitMqConfig["Username"] ?? "guest");
+            h.Password(rabbitMqConfig["Password"] ?? "guest");
         });
 
-
-        config.ReceiveEndpoint("stok-guncelleme-basarisiz-siparis-kuyrugu", e =>
+        
+        cfg.ReceiveEndpoint("stok-guncelleme-basarisiz-siparis-kuyrugu", e =>
         {
             e.ConfigureConsumer<StokGuncellemeBasarisizConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("iade-talebi-kuyrugu-siparis", e =>
+        {
+            e.ConfigureConsumer<IadeOnaylandiConsumer>(context);
         });
     });
 });

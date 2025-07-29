@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifikasyon.Worker", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stok.Worker", "src\Workers\Stok.Worker\Stok.Worker.csproj", "{4A25FEFC-120C-4B99-AE29-72D5B6F67AA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iade.API", "src\Services\Iade.API\Iade.API.csproj", "{985F1A82-47D2-44F3-834E-0F8A5882E8C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{4A25FEFC-120C-4B99-AE29-72D5B6F67AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A25FEFC-120C-4B99-AE29-72D5B6F67AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A25FEFC-120C-4B99-AE29-72D5B6F67AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
