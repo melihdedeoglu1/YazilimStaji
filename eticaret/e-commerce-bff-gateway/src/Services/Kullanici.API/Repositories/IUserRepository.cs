@@ -8,5 +8,6 @@ namespace Kullanici.API.Repositories
         Task<bool> UserExists(string email);
         Task<User> GetUserByEmail(string email);
         Task<User?> GetUserById(int id);
+        Task<DateTime?> GetUserByIdForDateTime(int id);
     }
 }

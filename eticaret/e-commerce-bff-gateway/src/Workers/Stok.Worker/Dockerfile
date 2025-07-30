@@ -13,6 +13,7 @@ COPY ["src/Services/Kullanici.API/Kullanici.API.csproj", "src/Services/Kullanici
 COPY ["src/Services/Siparis.API/Siparis.API.csproj", "src/Services/Siparis.API/"]
 COPY ["src/Services/Urun.API/Urun.API.csproj", "src/Services/Urun.API/"]
 COPY ["src/Services/Iade.API/Iade.API.csproj", "src/Services/Iade.API/"]
+COPY ["src/Services/Rapor.API/Rapor.API.csproj", "src/Services/Rapor.API/"]
 COPY ["src/Workers/Notifikasyon.Worker/Notifikasyon.Worker.csproj", "src/Workers/Notifikasyon.Worker/"]
 COPY ["src/Workers/Stok.Worker/Stok.Worker.csproj", "src/Workers/Stok.Worker/"]
 
@@ -28,7 +29,7 @@ WORKDIR "/src/src/Workers/Stok.Worker"
 RUN dotnet publish "Stok.Worker.csproj" -c Release -o /app/publish 
 
 
-FROM mcr.microsoft.com/dotnet/runtime:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Stok.Worker.dll"]

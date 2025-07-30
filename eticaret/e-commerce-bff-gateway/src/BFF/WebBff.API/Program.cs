@@ -1,7 +1,9 @@
+using MassTransit;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Polly;
 using Polly.Extensions.Http;
 using System.Net.Http;
-using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,22 @@ builder.Services.AddMassTransit(configurator =>
         });
     });
 });
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddSource("MassTransit")
+
+        .AddOtlpExporter(otlpOptions =>
+        {
+            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+            if (!string.IsNullOrEmpty(otlpEndpoint))
+            {
+                otlpOptions.Endpoint = new Uri(otlpEndpoint);
+            }
+        }));
 
 
 builder.Services.AddControllers();

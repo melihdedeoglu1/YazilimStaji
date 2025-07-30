@@ -76,7 +76,16 @@ namespace Kullanici.API.Services
 
 
 
+        public async Task<DateTime?> GetUserByIdForDateTime(int id) 
+        {
+            var userDatetime = await _userRepository.GetUserByIdForDateTime(id);
+            if (userDatetime == null) 
+            {
+                return DateTime.Now;
+            }
 
+            return userDatetime;
+        }
 
 
 

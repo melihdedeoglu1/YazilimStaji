@@ -62,11 +62,22 @@ namespace Siparis.API.Controllers
             {              
                 return Unauthorized("Geçerli bir kullanıcı e-postası bulunamadı.");
             }
-
+            var roleClaim = User.FindFirst(ClaimTypes.Role);
+            if (roleClaim == null)
+            {
+                return Unauthorized("Geçerli bir kullanıcı rolü bulunamadı.");
+            }
+            var nameClaim = User.FindFirst(ClaimTypes.Name);
+            if (nameClaim == null)
+            {
+                return Unauthorized("Geçerli bir kullanıcı adı bulunamadı.");
+            }
             var userId = int.Parse(userIdString);
             var userEmail = emailClaim.Value;
+            var role = roleClaim.Value;
+            var userName = nameClaim.Value;
 
-            var createdOrder = await _orderService.CreateAsync(userId, userEmail, orderDto);
+            var createdOrder = await _orderService.CreateAsync(userId, userEmail,role,userName, orderDto);
 
             
             return Ok(createdOrder);

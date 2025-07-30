@@ -15,6 +15,7 @@ services:
       - urun-servisi
       - siparis-servisi
       - iade-servisi
+      - rapor-servisi 
       - web-bff
       - jaeger 
     networks:
@@ -29,6 +30,7 @@ services:
       - "5003:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Otlp__Endpoint=http://jaeger:4317
     networks:
       - ecom_network
 
@@ -38,7 +40,7 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=kullanici_db 
+      - POSTGRES_DB=kullanici_db       
     ports:
       - "5433:5432"
     volumes:
@@ -80,6 +82,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=kullanici_db;Username=user;Password=password
+      - Otlp__Endpoint=http://jaeger:4317 
     depends_on:
       - postgres-db
     networks:
@@ -95,6 +98,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=urun_db;Username=user;Password=password
+      - Otlp__Endpoint=http://jaeger:4317 
     depends_on:
       - postgres-db
     networks:
@@ -113,6 +117,7 @@ services:
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
+      - Otlp__Endpoint=http://jaeger:4317 
     depends_on:
       - postgres-db
       - rabbitmq
@@ -132,6 +137,27 @@ services:
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
+      - Otlp__Endpoint=http://jaeger:4317 
+    depends_on:
+      - postgres-db
+      - rabbitmq
+    networks:
+      - ecom_network
+
+  rapor-servisi:
+    container_name: rapor-servisi
+    build:
+      context: .
+      dockerfile: src/Services/Rapor.API/Dockerfile
+    ports:
+      - "5006:8080" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+      - ConnectionStrings__DefaultConnection=Host=postgres-db;Port=5432;Database=rapor_db;Username=user;Password=password
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      - Otlp__Endpoint=http://jaeger:4317 
     depends_on:
       - postgres-db
       - rabbitmq
@@ -148,6 +174,7 @@ services:
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
+      - Otlp__Endpoint=http://jaeger:4317 
     depends_on:
       - rabbitmq
     networks:
@@ -163,10 +190,12 @@ services:
       - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
+      - Otlp__Endpoint=http://jaeger:4317 
     depends_on:
       - rabbitmq
     networks:
       - ecom_network
+
 
 volumes:
   pgdata:

@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stok.Worker", "src\Workers\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iade.API", "src\Services\Iade.API\Iade.API.csproj", "{985F1A82-47D2-44F3-834E-0F8A5882E8C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rapor.API", "src\Services\Rapor.API\Rapor.API.csproj", "{880644F8-DD87-46C3-850F-AAE0BCA41109}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{985F1A82-47D2-44F3-834E-0F8A5882E8C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880644F8-DD87-46C3-850F-AAE0BCA41109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880644F8-DD87-46C3-850F-AAE0BCA41109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880644F8-DD87-46C3-850F-AAE0BCA41109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880644F8-DD87-46C3-850F-AAE0BCA41109}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

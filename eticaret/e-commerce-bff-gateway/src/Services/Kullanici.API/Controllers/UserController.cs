@@ -17,6 +17,15 @@ namespace Kullanici.API.Controllers
             _userService = userService;
         }
 
+        [HttpGet("datetime/{id}")]
+        public async Task<IActionResult> GetUserByIdForDateTime(int id) 
+        { 
+            var userDatetime = await _userService.GetUserByIdForDateTime(id);
+
+            return Ok(userDatetime);
+        
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {

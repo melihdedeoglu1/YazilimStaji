@@ -1,5 +1,7 @@
 using MassTransit;
 using Notifikasyon.Worker.Consumers;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 public class Program
 {
@@ -31,6 +33,26 @@ public class Program
                         });
                     });
                 });
+
+                services.AddOpenTelemetry()
+                   .ConfigureResource(resource => resource.AddService(serviceName: hostContext.HostingEnvironment.ApplicationName))
+                   .WithTracing(tracing =>
+                   {
+                       tracing
+                           .AddHttpClientInstrumentation()
+                           .AddSource("MassTransit");
+
+
+                       var otlpEndpoint = hostContext.Configuration["Otlp:Endpoint"];
+                       if (!string.IsNullOrEmpty(otlpEndpoint))
+                       {
+                           tracing.AddOtlpExporter(otlpOptions =>
+                           {
+                               otlpOptions.Endpoint = new Uri(otlpEndpoint);
+                           });
+                       }
+                   });
+
             })
             .Build();
 

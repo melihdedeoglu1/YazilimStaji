@@ -26,7 +26,7 @@ namespace Siparis.API.Services
             return await _orderRepository.GetOrdersByUserIdAsync(userId);
         }
 
-        public async Task<Order> CreateAsync(int userId, string userEmail, OrderForCreateDto orderDto)
+        public async Task<Order> CreateAsync(int userId, string userEmail, string role,string userName, OrderForCreateDto orderDto)
         {
           
             var client = _httpClientFactory.CreateClient();
@@ -38,12 +38,14 @@ namespace Siparis.API.Services
             foreach (var itemDto in orderDto.OrderItems)
             {
                 ProductDetailDto? product = null;
+                
                 try
                 {
                     var response = await client.GetAsync($"/api/Product/{itemDto.ProductId}");
                     if (response.IsSuccessStatusCode)
                     {
                         product = await response.Content.ReadFromJsonAsync<ProductDetailDto>();
+
                     }
                     else
                     {
@@ -65,6 +67,7 @@ namespace Siparis.API.Services
                         Quantity = itemDto.Quantity,
                         Price = product.Price,
                         ProductName = product.Name
+                        
                     });
                     totalPrice += itemDto.Quantity * product.Price;
                 }
@@ -87,7 +90,33 @@ namespace Siparis.API.Services
             var savedOrder = await _orderRepository.CreateAsync(newOrder);
             _logger.LogInformation("Sipariş veritabanına başarıyla kaydedildi. SiparisId: {SiparisId}", savedOrder.Id);
 
-            
+
+            DateTime userDatetime = DateTime.MinValue;
+            try
+            {
+                var userClient = _httpClientFactory.CreateClient();
+                userClient.BaseAddress = new Uri("http://kullanici-servisi:8080");
+                var response = await userClient.GetAsync($"/api/User/datetime/{savedOrder.UserId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string dateAsString = await response.Content.ReadAsStringAsync();
+                    userDatetime = DateTime.Parse(dateAsString);
+                }
+                else
+                {
+                    _logger.LogWarning("Ürün bilgisi çekilemedi. ");
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "User.API'ye istek atılırken hata oluştu.");
+                
+            }
+
+
+
             var eventMessage = new SiparisOlusturulduEvent
             {
                 SiparisId = savedOrder.Id,
@@ -100,7 +129,13 @@ namespace Siparis.API.Services
                     UrunAdi = item.ProductName,
                     Fiyat = item.Price,
                     Adet = item.Quantity
-                }).ToList()
+
+                }).ToList(),
+                SiparisTarihi = savedOrder.OrderDate,
+                Durum = savedOrder.Status,
+                KullaniciRol = role,
+                UserDate = userDatetime,
+                KullaniciAdi = userName
             };
 
             

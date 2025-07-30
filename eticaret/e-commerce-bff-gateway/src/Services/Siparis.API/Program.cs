@@ -1,8 +1,10 @@
 using MassTransit;
-using Siparis.API.Consumers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Siparis.API.Consumers;
 using Siparis.API.Data;
 using Siparis.API.Repositories;
 using Siparis.API.Services;
@@ -30,6 +32,24 @@ builder.Services.AddAuthentication("Bearer")
                 Encoding.UTF8.GetBytes("super-secret-simplemart-key-1234567890"))
         };
     });
+
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddSource("MassTransit")
+
+        .AddOtlpExporter(otlpOptions =>
+        {
+            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+            if (!string.IsNullOrEmpty(otlpEndpoint))
+            {
+                otlpOptions.Endpoint = new Uri(otlpEndpoint);
+            }
+        }));
+
 
 // Add services to the container.
 

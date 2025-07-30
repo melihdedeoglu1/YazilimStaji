@@ -1,9 +1,9 @@
-
-
 using MassTransit;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Stok.Worker.Consumers;
-using Stok.Worker.Data;        
+using Stok.Worker.Data;
 
 public class Program
 {
@@ -16,14 +16,11 @@ public class Program
                 var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
                 services.AddDbContext<ProductContext>(options =>
                 {
-                    
                     options.UseNpgsql(connectionString);
                 });
-               
 
                 services.AddMassTransit(configurator =>
                 {
-                    
                     configurator.AddConsumer<SiparisOlusturulduStokConsumer>();
 
                     configurator.UsingRabbitMq((context, config) =>
@@ -42,6 +39,26 @@ public class Program
                         });
                     });
                 });
+
+               
+                services.AddOpenTelemetry()
+                    .ConfigureResource(resource => resource.AddService(serviceName: hostContext.HostingEnvironment.ApplicationName))
+                    .WithTracing(tracing =>
+                    {
+                        tracing                           
+                            .AddHttpClientInstrumentation()                         
+                            .AddSource("MassTransit");
+
+                        
+                        var otlpEndpoint = hostContext.Configuration["Otlp:Endpoint"];
+                        if (!string.IsNullOrEmpty(otlpEndpoint))
+                        {
+                            tracing.AddOtlpExporter(otlpOptions =>
+                            {
+                                otlpOptions.Endpoint = new Uri(otlpEndpoint);
+                            });
+                        }
+                    });
             })
             .Build();
 

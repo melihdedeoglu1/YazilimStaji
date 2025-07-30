@@ -1,7 +1,9 @@
+using Iade.API.Consumers;
 using Iade.API.Data;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Iade.API.Consumers;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,23 @@ builder.Services.AddMassTransit(configurator =>
 });
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddSource("MassTransit")
+
+        .AddOtlpExporter(otlpOptions =>
+        {
+            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+            if (!string.IsNullOrEmpty(otlpEndpoint))
+            {
+                otlpOptions.Endpoint = new Uri(otlpEndpoint);
+            }
+        }));
+
 
 
 builder.Services.AddControllers();
