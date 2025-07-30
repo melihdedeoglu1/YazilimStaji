@@ -5,6 +5,8 @@ using System.Text;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -26,6 +28,17 @@ builder.Services.AddAuthentication("Bearer")
                 Encoding.UTF8.GetBytes("super-secret-simplemart-key-1234567890")) 
         };
     });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
 
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
@@ -49,6 +62,8 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 await app.UseOcelot();
 

@@ -196,7 +196,8 @@
           "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/bff/{everything}"
+      "UpstreamPathTemplate": "/bff/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ]
     }
 
 
