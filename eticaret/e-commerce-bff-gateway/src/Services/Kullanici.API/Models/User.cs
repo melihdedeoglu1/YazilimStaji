@@ -16,6 +16,7 @@ namespace Kullanici.API.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = string.Empty;
 
+        public double Balance { get; set; } = 0;
         public byte[] PasswordHash { get; set; } = new byte[32];
         public byte[] PasswordSalt { get; set; } = new byte[32];
 

@@ -65,5 +65,24 @@ namespace Kullanici.API.Controllers
             return Ok(userDto);
         }
 
+
+
+
+        [HttpPost("{id}/bakiye-dusur")]
+        public async Task<IActionResult> BakiyeDusur(int id, [FromBody] BakiyeDusurDto dto)
+        {
+            
+            var basariliMi = await _userService.BakiyeDusur(id, dto.Tutar);
+
+            if (basariliMi)
+            {
+                return Ok(); 
+            }
+
+            return BadRequest("Yetersiz bakiye."); 
+        }
+
+
+
     }
 }

@@ -75,7 +75,6 @@ namespace Kullanici.API.Services
         }
 
 
-
         public async Task<DateTime?> GetUserByIdForDateTime(int id) 
         {
             var userDatetime = await _userRepository.GetUserByIdForDateTime(id);
@@ -86,6 +85,33 @@ namespace Kullanici.API.Services
 
             return userDatetime;
         }
+
+
+        public async Task<bool> BakiyeDusur(int userId, double tutar)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+
+            if (user.Balance < tutar)
+            {
+                return false;
+            }
+
+
+            user.Balance -= tutar;
+            await _userRepository.UpdateAsync(user);
+
+            return true;
+        }
+
+
+
+
 
 
 

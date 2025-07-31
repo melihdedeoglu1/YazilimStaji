@@ -45,7 +45,7 @@ builder.Services.AddAuthentication("Bearer")
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("super-secret-simplemart-key-1234567890")) // auth servis ile ayný key
+                Encoding.UTF8.GetBytes("super-secret-simplemart-key-1234567890")) 
         };
     });
 

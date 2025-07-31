@@ -1,4 +1,5 @@
 using MassTransit;
+using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +8,7 @@ using OpenTelemetry.Trace;
 using Siparis.API.Consumers;
 using Siparis.API.Data;
 using Siparis.API.Repositories;
+using Siparis.API.Sagas;
 using Siparis.API.Services;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -54,8 +56,13 @@ builder.Services.AddOpenTelemetry()
 // Add services to the container.
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<SiparisContext>(options =>
     options.UseNpgsql(connectionString));
+
+var connectionStringSaga = builder.Configuration.GetConnectionString("DefaultConnectionSaga");
+builder.Services.AddDbContext<SagaContext>(options =>
+    options.UseNpgsql(connectionStringSaga));
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -87,7 +94,16 @@ builder.Services.AddMassTransit(configurator =>
     configurator.AddConsumer<StokGuncellemeBasarisizConsumer>();
     configurator.AddConsumer<IadeOnaylandiConsumer>();
 
-    
+    configurator.AddSagaStateMachine<SiparisSagaStateMachine, SiparisSagaState>()
+        .EntityFrameworkRepository(r =>
+        {
+            
+            r.ExistingDbContext<SagaContext>();
+
+            
+            r.LockStatementProvider = new PostgresLockStatementProvider();
+        });
+
     configurator.UsingRabbitMq((context, cfg) =>
     {
         var rabbitMqConfig = builder.Configuration.GetSection("RabbitMQ");
@@ -144,6 +160,20 @@ using (var scope = app.Services.CreateScope())
 }
 
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContextSaga = services.GetRequiredService<SagaContext>();
+        dbContextSaga.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the saga_db database.");
+    }
+}
 
 
 

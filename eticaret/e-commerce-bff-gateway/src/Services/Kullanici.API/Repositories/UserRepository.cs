@@ -45,11 +45,29 @@ namespace Kullanici.API.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        
+
         public async Task<DateTime?> GetUserByIdForDateTime(int id) 
         { 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             return user.CreatedAt;
         }
+
+
+
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+
+
     }
 }

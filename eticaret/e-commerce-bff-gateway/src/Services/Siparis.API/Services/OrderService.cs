@@ -26,6 +26,105 @@ namespace Siparis.API.Services
             return await _orderRepository.GetOrdersByUserIdAsync(userId);
         }
 
+
+        public async Task<Guid> CreateOrderSagaAsync(int userId, string userEmail, string role, string userName, OrderForCreateDto orderDto)
+        {
+           
+            var productClient = _httpClientFactory.CreateClient();
+            productClient.BaseAddress = new Uri("http://urun-servisi:8080");
+
+            double totalPrice = 0;
+            var siparisKalemleriDto = new List<SiparisKalemiSagaDto>();
+
+            foreach (var itemDto in orderDto.OrderItems)
+            {
+                ProductDetailDto? product = null;
+                try
+                {
+                    var response = await productClient.GetAsync($"/api/Product/{itemDto.ProductId}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        product = await response.Content.ReadFromJsonAsync<ProductDetailDto>();
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Ürün bilgisi çekilemedi. ProductId: {ProductId}, Status: {StatusCode}", itemDto.ProductId, response.StatusCode);
+                        continue;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Urun.API'ye istek atılırken hata oluştu. ProductId: {ProductId}", itemDto.ProductId);
+                    continue;
+                }
+
+                if (product != null)
+                {
+                    siparisKalemleriDto.Add(new SiparisKalemiSagaDto
+                    {
+                        UrunId = itemDto.ProductId,
+                        UrunAdi = product.Name,
+                        Fiyat = product.Price,
+                        Adet = itemDto.Quantity
+                    });
+                    totalPrice += itemDto.Quantity * product.Price;
+                }
+            }
+
+            if (!siparisKalemleriDto.Any())
+            {
+                throw new Exception("Sipariş oluşturmak için geçerli hiçbir ürün bulunamadı.");
+            }
+
+            
+            DateTime userDatetime = DateTime.MinValue;
+            try
+            {
+                var userClient = _httpClientFactory.CreateClient();
+                userClient.BaseAddress = new Uri("http://kullanici-servisi:8080");
+                var response = await userClient.GetAsync($"/api/User/datetime/{userId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string dateAsString = await response.Content.ReadAsStringAsync();
+                    DateTime.TryParse(dateAsString, out userDatetime);
+                }
+                else
+                {
+                    _logger.LogWarning("Kullanıcı tarihi bilgisi çekilemedi. UserId: {UserId}", userId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Kullanici.API'ye istek atılırken hata oluştu. UserId: {UserId}", userId);
+            }
+
+            
+            var correlationId = Guid.NewGuid();
+
+            var eventMessage = new SiparisSagaBaslatildiEvent
+            {
+                CorrelationId = correlationId,
+                KullaniciId = userId,
+                KullaniciEmail = userEmail,
+                KullaniciRol = role,
+                KullaniciAdi = userName,
+                TalepTarihi = DateTime.UtcNow,
+                UserDate = userDatetime,
+                ToplamTutar = totalPrice,
+                SiparisKalemleri = siparisKalemleriDto
+            };
+
+            await _publishEndpoint.Publish(eventMessage);
+            _logger.LogInformation("Siparis Saga süreci başlatıldı. CorrelationId: {CorrelationId}", correlationId);
+
+            return correlationId;
+        }
+
+
+
+
+
         public async Task<Order> CreateAsync(int userId, string userEmail, string role,string userName, OrderForCreateDto orderDto)
         {
           

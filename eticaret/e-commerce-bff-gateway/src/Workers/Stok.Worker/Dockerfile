@@ -14,6 +14,8 @@ COPY ["src/Services/Siparis.API/Siparis.API.csproj", "src/Services/Siparis.API/"
 COPY ["src/Services/Urun.API/Urun.API.csproj", "src/Services/Urun.API/"]
 COPY ["src/Services/Iade.API/Iade.API.csproj", "src/Services/Iade.API/"]
 COPY ["src/Services/Rapor.API/Rapor.API.csproj", "src/Services/Rapor.API/"]
+COPY ["src/Services/Odeme.API/Odeme.API.csproj", "src/Services/Odeme.API/"]
+COPY ["src/Services/Kargo.API/Kargo.API.csproj", "src/Services/Kargo.API/"]
 COPY ["src/Workers/Notifikasyon.Worker/Notifikasyon.Worker.csproj", "src/Workers/Notifikasyon.Worker/"]
 COPY ["src/Workers/Stok.Worker/Stok.Worker.csproj", "src/Workers/Stok.Worker/"]
 

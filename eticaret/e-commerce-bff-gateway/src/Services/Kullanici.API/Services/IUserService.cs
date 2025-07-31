@@ -9,5 +9,7 @@ namespace Kullanici.API.Services
         Task<string> Login(UserForLoginDto userForLoginDto);
         Task<UserForDetailDto?> GetUserById(int id);
         Task<DateTime?> GetUserByIdForDateTime(int id);
+
+        Task<bool> BakiyeDusur(int userId, double tutar);
     }
 }
