@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient("ApiGatewayClient", client =>
 {
-    // docker-compose içindeki gateway'in adresi
+   
     client.BaseAddress = new Uri("http://api-gateway:8080");
 })
 .AddPolicyHandler(GetRetryPolicy());
@@ -21,10 +21,10 @@ builder.Services.AddHttpClient("ApiGatewayClient", client =>
 
 builder.Services.AddMassTransit(configurator =>
 {
-    // Bu servis sadece event yayýnlayacaðý için Consumer tanýmlamaya gerek yok.
+    
     configurator.UsingRabbitMq((context, cfg) =>
     {
-        // docker-compose.yml'den RabbitMQ host bilgisini al
+        
         cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
         {
             h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");

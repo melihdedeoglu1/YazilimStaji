@@ -90,9 +90,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(configurator =>
 {
-   
+   /*
     configurator.AddConsumer<StokGuncellemeBasarisizConsumer>();
-    configurator.AddConsumer<IadeOnaylandiConsumer>();
+    configurator.AddConsumer<IadeOnaylandiConsumer>();7
+   */
+    configurator.AddConsumer<SiparisTamamlandiEventConsumer>();
 
     configurator.AddSagaStateMachine<SiparisSagaStateMachine, SiparisSagaState>()
         .EntityFrameworkRepository(r =>
@@ -113,7 +115,7 @@ builder.Services.AddMassTransit(configurator =>
             h.Password(rabbitMqConfig["Password"] ?? "guest");
         });
 
-        
+        /*
         cfg.ReceiveEndpoint("stok-guncelleme-basarisiz-siparis-kuyrugu", e =>
         {
             e.ConfigureConsumer<StokGuncellemeBasarisizConsumer>(context);
@@ -122,6 +124,17 @@ builder.Services.AddMassTransit(configurator =>
         cfg.ReceiveEndpoint("iade-talebi-kuyrugu-siparis", e =>
         {
             e.ConfigureConsumer<IadeOnaylandiConsumer>(context);
+        });
+        */
+        cfg.ReceiveEndpoint("siparis-tamamlandi-saga-kuyrugu", e =>
+        {
+            e.ConfigureConsumer<SiparisTamamlandiEventConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("siparis-saga-kuyrugu", e =>
+        {
+            
+            e.ConfigureSaga<SiparisSagaState>(context);
         });
     });
 });

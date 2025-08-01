@@ -34,14 +34,24 @@ namespace Shared.Contracts
 
 
 
-
+    public class SiparisIptalTalebiEvent
+    {
+        public Guid CorrelationId { get; set; }
+    }
 
 
 
     public class SiparisTamamlandiEvent
     {
         public Guid CorrelationId { get; set; }
-        public int SiparisId { get; set; }
+        public int KullaniciId { get; set; }
+        public string KullaniciEmail { get; set; } = string.Empty;
+        public string KullaniciRol { get; set; } = string.Empty;
+        public string KullaniciAdi { get; set; } = string.Empty;
+        public DateTime TalepTarihi { get; set; }
+        public DateTime UserDate { get; set; }
+        public double ToplamTutar { get; set; }
+        public List<SiparisKalemiSagaDto> SiparisKalemleri { get; set; } = new();
     }
 
     public class SiparisIptalEdildiEvent
@@ -110,6 +120,26 @@ namespace Shared.Contracts
 
 
 
+    public class KargoHazirlaCommand
+    {
+        public Guid CorrelationId { get; set; }      
+        public int KullaniciId { get; set; }
+        public int SiparisId { get; set; }
+        public List<SiparisKalemiSagaDto> SiparisKalemleri { get; set; } = new();
+    }
+
+
+    public class KargoHazirlandiEvent
+    {
+        public Guid CorrelationId { get; set; }
+    }
+
+   
+    public class KargoHazirlanamadiEvent
+    {
+        public Guid CorrelationId { get; set; }
+        public string HataMesaji { get; set; } = string.Empty;
+    }
 
 
 

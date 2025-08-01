@@ -15,5 +15,12 @@ namespace Siparis.API.Sagas
         public DateTime OlusturmaTarihi { get; set; }
 
         public List<SiparisKalemiSagaDto> SiparisKalemleri { get; set; } = new();
+
+
+        public string KullaniciEmail { get; set; } = string.Empty;
+        public string KullaniciRol { get; set; } = string.Empty;
+        public string KullaniciAdi { get; set; } = string.Empty;
+        public DateTime UserDate { get; set; }
+
     }
 }

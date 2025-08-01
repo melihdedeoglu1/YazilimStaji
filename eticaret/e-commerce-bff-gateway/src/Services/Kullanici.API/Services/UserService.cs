@@ -109,7 +109,20 @@ namespace Kullanici.API.Services
             return true;
         }
 
+        public async Task<bool> BakiyeIadeEt(int userId, double tutar)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
 
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.Balance += tutar;
+            await _userRepository.UpdateAsync(user);
+
+            return true;
+        }
 
 
 

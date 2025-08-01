@@ -11,5 +11,6 @@ namespace Kullanici.API.Services
         Task<DateTime?> GetUserByIdForDateTime(int id);
 
         Task<bool> BakiyeDusur(int userId, double tutar);
+        Task<bool> BakiyeIadeEt(int userId, double tutar);
     }
 }

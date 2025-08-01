@@ -29,9 +29,9 @@ builder.Services.AddDbContext<UrunContext>(options =>
 
 builder.Services.AddMassTransit(configurator =>
 {
-
+    /*
     configurator.AddConsumer<IadeOnaylandiConsumer>();
-
+    */
     configurator.UsingRabbitMq((context, cfg) =>
     {
 
@@ -41,11 +41,12 @@ builder.Services.AddMassTransit(configurator =>
             h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
         });
 
-
+        /*
         cfg.ReceiveEndpoint("iade-talebi-kuyrugu-urun", e =>
         {
             e.ConfigureConsumer<IadeOnaylandiConsumer>(context);
         });
+        */
     });
 });
 

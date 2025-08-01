@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Siparis.API.Data;
@@ -11,9 +12,11 @@ using Siparis.API.Data;
 namespace Siparis.API.Data.Migrations.SagaDb
 {
     [DbContext(typeof(SagaContext))]
-    partial class SagaContextModelSnapshot : ModelSnapshot
+    [Migration("20250801081009_ozellikEklemeSaga")]
+    partial class ozellikEklemeSaga
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

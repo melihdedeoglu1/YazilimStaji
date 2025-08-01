@@ -21,7 +21,9 @@ public class Program
 
                 services.AddMassTransit(configurator =>
                 {
-                    configurator.AddConsumer<SiparisOlusturulduStokConsumer>();
+                    //configurator.AddConsumer<SiparisOlusturulduStokConsumer>();
+                    configurator.AddConsumer<StokAyirCommandConsumer>();
+                    configurator.AddConsumer<StokSerbestBirakCommandConsumer>();
 
                     configurator.UsingRabbitMq((context, config) =>
                     {
@@ -31,11 +33,20 @@ public class Program
                             h.Username(rabbitMqConfig["Username"] ?? "guest");
                             h.Password(rabbitMqConfig["Password"] ?? "guest");
                         });
-
+                        /*
                         config.ReceiveEndpoint("siparis-olusturuldu-stok-kuyrugu", e =>
                         {
                             e.ConfigureConsumer<SiparisOlusturulduStokConsumer>(context);
                             e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
+                        });
+                        */
+                        config.ReceiveEndpoint("stok-ayir-kuyrugu", e =>
+                        {
+                            e.ConfigureConsumer<StokAyirCommandConsumer>(context);
+                        });
+                        config.ReceiveEndpoint("stok-serbest-birak-kuyrugu", e =>
+                        {
+                            e.ConfigureConsumer<StokSerbestBirakCommandConsumer>(context);
                         });
                     });
                 });

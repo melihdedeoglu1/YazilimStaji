@@ -24,8 +24,9 @@ builder.Services.AddMassTransit(configurator =>
 {
     
     configurator.AddConsumer<SiparisOlusturulduConsumer>();
+    /*
     configurator.AddConsumer<IadeOnaylandiConsumer>();
-
+    */
     configurator.UsingRabbitMq((context, cfg) =>
     {
         
@@ -40,10 +41,12 @@ builder.Services.AddMassTransit(configurator =>
         {
             e.ConfigureConsumer<SiparisOlusturulduConsumer>(context);
         });
+        /*
         cfg.ReceiveEndpoint("rapor-iadeonaylandi-kuyrugu", e =>
         {
             e.ConfigureConsumer<IadeOnaylandiConsumer>(context);
         });
+        */
     });
 });
  

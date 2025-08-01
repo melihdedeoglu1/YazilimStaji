@@ -21,7 +21,7 @@ builder.Services.AddMassTransit(configurator =>
 {
     
     configurator.AddConsumer<SiparisIadeTalebiConsumer>(); 
-
+    
     configurator.UsingRabbitMq((context, cfg) =>
     {
         

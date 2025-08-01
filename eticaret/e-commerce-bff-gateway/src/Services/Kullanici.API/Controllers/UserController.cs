@@ -82,7 +82,19 @@ namespace Kullanici.API.Controllers
             return BadRequest("Yetersiz bakiye."); 
         }
 
+        [HttpPost("{id}/bakiye-iade-et")]
+        public async Task<IActionResult> BakiyeIadeEt(int id, [FromBody] BakiyeIadeDto dto)
+        {
 
+            var basariliMi = await _userService.BakiyeIadeEt(id, dto.Tutar);
+
+            if (basariliMi)
+            {
+                return Ok();
+            }
+
+            return BadRequest("Yetersiz bakiye.");
+        }
 
     }
 }
