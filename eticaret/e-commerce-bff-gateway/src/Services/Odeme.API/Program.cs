@@ -1,7 +1,9 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Odeme.API.Data;
 using Odeme.API.Consumers;
+using Odeme.API.Data;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,25 @@ builder.Services.AddMassTransit(configurator =>
         });
     });
 });
+
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddSource("MassTransit")
+
+        .AddOtlpExporter(otlpOptions =>
+        {
+            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+            if (!string.IsNullOrEmpty(otlpEndpoint))
+            {
+                otlpOptions.Endpoint = new Uri(otlpEndpoint);
+            }
+        }));
+
+
 builder.Services.AddHttpClient();
 
 builder.Services.AddControllers();

@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
 using Siparis.API.Data;
 using Siparis.API.Models;
@@ -10,9 +11,6 @@ namespace Siparis.API.Sagas
 {
     public class SiparisSagaStateMachine : MassTransitStateMachine<SiparisSagaState>
     {
-        private readonly SiparisContext _siparisContext;
-        private readonly IPublishEndpoint _publishEndpoint;
-
         public State StokBekleniyor { get; private set; }
         public State OdemeBekleniyor { get; private set; }
         public State KargoBekleniyor { get; private set; }
@@ -26,11 +24,8 @@ namespace Siparis.API.Sagas
         public Event<KargoHazirlanamadiEvent> KargoHazirlanamadiEvent { get; private set; }
         public Event<SiparisIptalTalebiEvent> IptalTalebiEvent { get; private set; }
 
-        public SiparisSagaStateMachine(SiparisContext siparisContext, IPublishEndpoint publishEndpoint)
+        public SiparisSagaStateMachine()
         {
-            _siparisContext = siparisContext;
-            _publishEndpoint = publishEndpoint;
-
             InstanceState(x => x.CurrentState);
 
             Event(() => SagaBaslatildiEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
@@ -100,6 +95,10 @@ namespace Siparis.API.Sagas
                 When(OdemeBasariliEvent)
                     .ThenAsync(async context =>
                     {
+                       
+                        var provider = context.GetPayload<IServiceProvider>();
+                        var siparisContext = provider.GetRequiredService<SiparisContext>();
+
                         var newOrder = new Order
                         {
                             UserId = context.Saga.KullaniciId,
@@ -114,8 +113,10 @@ namespace Siparis.API.Sagas
                                 Quantity = item.Adet
                             }).ToList()
                         };
-                        await _siparisContext.Orders.AddAsync(newOrder);
-                        await _siparisContext.SaveChangesAsync();
+
+                        await siparisContext.Orders.AddAsync(newOrder);
+                        await siparisContext.SaveChangesAsync();
+
                         context.Saga.SiparisId = newOrder.Id;
                     })
                     .Send(new Uri("queue:kargo-hazirla-kuyrugu"), context => new KargoHazirlaCommand
@@ -156,28 +157,24 @@ namespace Siparis.API.Sagas
 
             During(KargoBekleniyor,
                 When(KargoHazirlandiEvent)
-                    .ThenAsync(async context =>
+                    .Publish(context => new SiparisOlusturulduEvent
                     {
-                        var eventMessage = new SiparisOlusturulduEvent
+                        SiparisId = context.Saga.SiparisId,
+                        KullaniciId = context.Saga.KullaniciId,
+                        KullaniciEmail = context.Saga.KullaniciEmail,
+                        ToplamTutar = context.Saga.ToplamTutar,
+                        SiparisTarihi = context.Saga.OlusturmaTarihi,
+                        Durum = "Tamamlandı",
+                        KullaniciRol = context.Saga.KullaniciRol,
+                        KullaniciAdi = context.Saga.KullaniciAdi,
+                        UserDate = context.Saga.UserDate,
+                        SiparisKalemleri = context.Saga.SiparisKalemleri.Select(item => new SiparisKalemiDto
                         {
-                            SiparisId = context.Saga.SiparisId,
-                            KullaniciId = context.Saga.KullaniciId,
-                            KullaniciEmail = context.Saga.KullaniciEmail,
-                            ToplamTutar = context.Saga.ToplamTutar,
-                            SiparisTarihi = context.Saga.OlusturmaTarihi,
-                            Durum = "Tamamlandı",
-                            KullaniciRol = context.Saga.KullaniciRol,
-                            KullaniciAdi = context.Saga.KullaniciAdi,
-                            UserDate = context.Saga.UserDate,
-                            SiparisKalemleri = context.Saga.SiparisKalemleri.Select(item => new SiparisKalemiDto
-                            {
-                                UrunId = item.UrunId,
-                                UrunAdi = item.UrunAdi,
-                                Fiyat = item.Fiyat,
-                                Adet = item.Adet
-                            }).ToList()
-                        };
-                        await _publishEndpoint.Publish(eventMessage);
+                            UrunId = item.UrunId,
+                            UrunAdi = item.UrunAdi,
+                            Fiyat = item.Fiyat,
+                            Adet = item.Adet
+                        }).ToList()
                     })
                     .Finalize(),
 

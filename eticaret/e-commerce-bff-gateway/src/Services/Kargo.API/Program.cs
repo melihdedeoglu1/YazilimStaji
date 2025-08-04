@@ -1,6 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+using Kargo.API.Consumers;
 using Kargo.API.Data;
-
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,43 @@ builder.Services.AddDbContext<KargoContext>(options =>
 
 
 
+builder.Services.AddMassTransit(configurator =>
+{
+    configurator.AddConsumer<KargoHazirlaCommandConsumer>();
 
+    configurator.UsingRabbitMq((context, cfg) =>
+    {
+        var rabbitMqConfig = builder.Configuration.GetSection("RabbitMQ");
+        cfg.Host(rabbitMqConfig["Host"], "/", h =>
+        {
+            h.Username(rabbitMqConfig["Username"] ?? "guest");
+            h.Password(rabbitMqConfig["Password"] ?? "guest");
+        });
+
+       
+        cfg.ReceiveEndpoint("kargo-hazirla-kuyrugu", e =>
+        {
+            e.ConfigureConsumer<KargoHazirlaCommandConsumer>(context);
+        });
+    });
+});
+
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddSource("MassTransit")
+
+        .AddOtlpExporter(otlpOptions =>
+        {
+            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+            if (!string.IsNullOrEmpty(otlpEndpoint))
+            {
+                otlpOptions.Endpoint = new Uri(otlpEndpoint);
+            }
+        }));
 
 
 builder.Services.AddControllers();
